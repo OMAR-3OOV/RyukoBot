@@ -8,12 +8,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public final class AIManager {
 
     private final User user;
-    private final File file = new File("System/chatbot/");
+    private final File file = new File("system/chatbot/");
     private final File userFile;
     private final Message message;
     private JSONArray messagesList;
@@ -22,7 +21,7 @@ public final class AIManager {
     public AIManager(User user, Message message) {
         this.user = user;
         this.message = message;
-        this.userFile = new File( "System/chatbot/" + user.getId() + ".json");
+        this.userFile = new File( "system/chatbot/" + user.getId() + ".json");
         this.parser = new JSONParser();
         this.messagesList = new JSONArray();
 

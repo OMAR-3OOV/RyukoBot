@@ -137,8 +137,8 @@ public final class Events extends ListenerAdapter {
                 }
             }
 
-            File order = new File("System/Guilds/");
-            File file = new File("System/Guilds/" + event.getGuild().getId() + ".properties");
+            File order = new File("system/Guilds/");
+            File file = new File("system/Guilds/" + event.getGuild().getId() + ".properties");
 
             if (!order.exists()) {
                 file.getParentFile().mkdirs();
@@ -171,7 +171,7 @@ public final class Events extends ListenerAdapter {
                 }
 
                 try {
-                    p.save(new FileOutputStream("System/Guilds/" + event.getGuild().getId() + ".properties"), null);
+                    p.save(new FileOutputStream("system/Guilds/" + event.getGuild().getId() + ".properties"), null);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -185,7 +185,7 @@ public final class Events extends ListenerAdapter {
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
 
-        File file = new File("System/Guilds/" + event.getGuild().getId() + ".properties");
+        File file = new File("system/Guilds/" + event.getGuild().getId() + ".properties");
 
         if (file.exists()) {
             file.delete();
@@ -396,7 +396,7 @@ public final class Events extends ListenerAdapter {
                     String channelCheck = "";
                     String rewardCheck = "";
 
-                    File file = new File("System/Game/events/numbersGame/Guilds/" + event.getGuild().getId() + "/Settings.properties");
+                    File file = new File("system/Game/events/numbersGame/Guilds/" + event.getGuild().getId() + "/Settings.properties");
                     if (file.exists()) {
                         FileReader reader = null;
                         try {
@@ -703,7 +703,7 @@ public final class Events extends ListenerAdapter {
                     if (event.getMessage().getContentRaw().equalsIgnoreCase("yes") || event.getMessage().getContentRaw().equalsIgnoreCase("continue")) {
                         Steps.put(event.getAuthor(), eventsGame.setup_count);
 
-                        File file = new File("System/Game/events/numbersGame/Guilds/" + event.getGuild().getId() + "/Settings.properties");
+                        File file = new File("system/Game/events/numbersGame/Guilds/" + event.getGuild().getId() + "/Settings.properties");
                         if (file.exists()) {
                             FileReader reader = null;
                             try {
@@ -1655,7 +1655,7 @@ public final class Events extends ListenerAdapter {
                             }
 
                             try {
-                                rpcGame.p.save(new FileOutputStream("System/Game/rpcGame/" + event.getUser().getId() + ".properties"), null);
+                                rpcGame.p.save(new FileOutputStream("system/Game/rpcGame/" + event.getUser().getId() + ".properties"), null);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -1719,7 +1719,7 @@ public final class Events extends ListenerAdapter {
                             }
 
                             try {
-                                rpcGame.p.save(new FileOutputStream("System/Game/rpcGame/" + event.getUser().getId() + ".properties"), null);
+                                rpcGame.p.save(new FileOutputStream("system/Game/rpcGame/" + event.getUser().getId() + ".properties"), null);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -1782,7 +1782,7 @@ public final class Events extends ListenerAdapter {
                             }
 
                             try {
-                                rpcGame.p.save(new FileOutputStream("System/Game/rpcGame/" + event.getUser().getId() + ".properties"), null);
+                                rpcGame.p.save(new FileOutputStream("system/Game/rpcGame/" + event.getUser().getId() + ".properties"), null);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }

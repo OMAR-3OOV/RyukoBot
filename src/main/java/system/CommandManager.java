@@ -141,13 +141,13 @@ public class CommandManager {
                     BannedUtils bannedUtils = new BannedUtils(event.getAuthor(), event.getJDA().getSelfUser());
 
                     if (profile.getAutoBanned() >= 1) {
-                        bannedUtils.setBannedWithTime(bannedUtils.getUser(), 1, BannedElapsedTimes.HOURS);
+                        bannedUtils.setBannedWithTime(bannedUtils.getUser(), 1, BannedElapsedTimes.HOURS, "Spamming : " + bannedUtils.getProperties().getProperty("auto-banned"));
                     } else if (profile.getAutoBanned() >= 3) {
-                        bannedUtils.setBannedWithTime(bannedUtils.getUser(), 1, BannedElapsedTimes.WEEKS);
+                        bannedUtils.setBannedWithTime(bannedUtils.getUser(), 1, BannedElapsedTimes.WEEKS, "Spamming : " + bannedUtils.getProperties().getProperty("auto-banned"));
                     } else if (profile.getAutoBanned() >= 5) {
-                        bannedUtils.setBannedWithTime(bannedUtils.getUser(), 1, BannedElapsedTimes.YEARS);
+                        bannedUtils.setBannedWithTime(bannedUtils.getUser(), 1, BannedElapsedTimes.YEARS, "Spamming : " + bannedUtils.getProperties().getProperty("auto-banned"));
                     } else {
-                        bannedUtils.setBannedWithTime(bannedUtils.getUser(), 5, BannedElapsedTimes.MINUTE);
+                        bannedUtils.setBannedWithTime(bannedUtils.getUser(), 5, BannedElapsedTimes.MINUTE, "Spamming : " + bannedUtils.getProperties().getProperty("auto-banned"));
                     }
 
                     bannedUtils.getProfile().addAutoBanned(1);

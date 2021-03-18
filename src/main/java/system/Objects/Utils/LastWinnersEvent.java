@@ -12,7 +12,7 @@ public final class LastWinnersEvent {
     private final Properties properties;
 
     public LastWinnersEvent() {
-        this.file =  new File("System/Game/last_winner.properties");
+        this.file =  new File("system/Game/last_winner.properties");
         this.properties = new Properties();
 
         // create

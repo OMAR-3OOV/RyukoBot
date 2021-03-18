@@ -8,6 +8,7 @@ import system.Objects.Utils.RandomStringAPI;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BannedUtils {
 
@@ -15,7 +16,7 @@ public class BannedUtils {
     private User by;
     private ProfileBuilder profile;
 
-    private final File order = new File("System/Profiles/BanUser");
+    private final File order = new File("system/Profiles/BanUser");
     private final File banFile;
 
     private final SortProperties properties;
@@ -24,30 +25,46 @@ public class BannedUtils {
 
     public BannedUtils(User user, User by) {
         this.profile = new ProfileBuilder(user);
-        this.rsa = new RandomStringAPI(user, 10);
         this.user = user;
+        this.rsa = new RandomStringAPI(user, 10);
         this.by = by;
-        this.banFile = new File("System/Profiles/BanUser/" + rsa.getKey() + ".properties");
+        this.banFile = new File("system/Profiles/BanUser/" + rsa.getKey() + ".properties");
         this.properties = new SortProperties();
+
+        if (this.banFile.exists()) {
+            try {
+                properties.load(new FileInputStream(this.banFile));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public BannedUtils(User user, String ticket) {
         this.profile = new ProfileBuilder(user);
         this.user = user;
-        this.banFile = new File("System/Profiles/BanUser/" + ticket + ".properties");
+        this.banFile = new File("system/Profiles/BanUser/" + ticket + ".properties");
         this.properties = new SortProperties();
     }
 
     public BannedUtils(User user) {
         this.profile = new ProfileBuilder(user);
-        this.rsa = new RandomStringAPI(user, 10);
+        String ticket = profile.getProfileProperties().getProperty("banned-ticket");
         this.user = user;
-        this.banFile = new File("System/Profiles/BanUser/" + rsa.getKey() + ".properties");
+        this.banFile = new File("system/Profiles/BanUser/" + ticket + ".properties");
         this.properties = new SortProperties();
+
+        if (this.banFile.exists()) {
+            try {
+                properties.load(new FileInputStream(this.banFile));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public BannedUtils() {
-        this.banFile = new File("System/Profiles/BanUser");
+        this.banFile = new File("system/Profiles/BanUser");
         this.properties = new SortProperties();
 
         if (banFile.listFiles().length > 0) {
@@ -85,7 +102,7 @@ public class BannedUtils {
         return properties;
     }
 
-    public void build(Date date, Date time, String ticketId) {
+    public void build(Date date, Date time, String ticketId, String reason) {
         if (this.user.isBot() || this.user.isFake()) return;
 
         if (!this.banFile.getParentFile().exists()) {
@@ -111,9 +128,9 @@ public class BannedUtils {
                 properties.put("banned-ticket", ticketId);
                 properties.put("banned-by", this.by.getId());
                 properties.put("status", String.valueOf(true));
+                properties.put("reason", reason);
 
                 getProfile().setBanned(true);
-
                 save();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -138,7 +155,7 @@ public class BannedUtils {
      * @param amount       to get the time amount
      * @param elapsedTimes to calculate times
      */
-    public void setBannedWithTime(User target, int amount, BannedElapsedTimes elapsedTimes) {
+    public void setBannedWithTime(User target, int amount, BannedElapsedTimes elapsedTimes, String reason) {
         target.openPrivateChannel().queue(t -> {
             EmbedBuilder embed = new EmbedBuilder();
             StringBuilder builder = embed.getDescriptionBuilder();
@@ -152,7 +169,7 @@ public class BannedUtils {
             builder.append("**Banned by: **").append("Console system").append("\n \n");
             builder.append("**You'll get unbanned till: **").append(f.format(new Date(elapsed)));
             t.sendMessage(embed.build()).queue();
-            this.build(date, new Date(elapsed), this.getRsa().getKey());
+            this.build(date, new Date(elapsed), this.getRsa().getKey(),  reason);
         });
     }
 

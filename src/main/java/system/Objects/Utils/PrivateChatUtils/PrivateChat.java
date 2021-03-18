@@ -48,7 +48,7 @@ public class PrivateChat {
         this.code = generateFileCode();
 
         this.mode.put(sender, PrivateChatMode.CHATTING);
-        this.file = new File("System/PrivateChat/Users/" + this.code + ".properties");
+        this.file = new File("system/PrivateChat/Users/" + this.code + ".properties");
         this.properties = new Properties();
     }
 

@@ -49,19 +49,43 @@ public class bannedCommand implements Command {
             }
 
             if (command.equalsIgnoreCase("check")) {
+                EmbedBuilder embed = new EmbedBuilder();
                 String user = args.get(1);
 
                 final Pattern regex = Pattern.compile(Message.MentionType.USER.getPattern().pattern());
-                final Matcher matcher = regex.matcher(command);
+                final Matcher matcher = regex.matcher(user);
 
                 if (matcher.find()) {
-                    command = command.replace("<", "").replace("!", "").replace("@", "").replace("#", "").replace("&", "").replace(">", "");
+                    user = user.replace("<", "").replace("!", "").replace("@", "").replace("#", "").replace("&", "").replace(">", "");
                 } else if (matcher.find()) {
-                    command = Objects.requireNonNull(event.getGuild().getMembersByName(command, true)).stream().map(m -> m.getUser().getId()).collect(Collectors.joining());
+                    user = Objects.requireNonNull(event.getGuild().getMembersByName(user, true)).stream().map(m -> m.getUser().getId()).collect(Collectors.joining());
                 }
 
-                User target = Objects.requireNonNull(event.getGuild().getMemberById(command)).getUser();
+                User target = Objects.requireNonNull(event.getGuild().getMemberById(user)).getUser();
 
+
+                if (target.isBot() || target.isFake()) {
+                    event.getChannel().sendMessage(new MessageUtils(":error: Bots is unbannable!").EmojisHolder()).queue();
+                    return;
+                }
+
+                BannedUtils bannedUtils = new BannedUtils(target);
+                SimpleDateFormat f = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss a");
+
+                if (bannedUtils.getProfile().getBanned()) {
+                    embed.setColor(new Color(255, 84, 84));
+                    embed.setTitle(bannedUtils.getUser().getName() + " is currently Punched!");
+                    embed.addField("Reason", "> " + bannedUtils.getProperties().getProperty("reason"), false);
+                    embed.addField("Punched by: ", "> " + event.getJDA().getUserById(bannedUtils.getProperties().getProperty("banned-by")).getName(), false);
+                    embed.addField("Banned till: ", "> " + f.format(Long.parseLong(bannedUtils.getProperties().getProperty("time-end"))), false);
+                    embed.addField("Time left: ", "> " + printTimeLeft(new Date(), new Date(Long.parseLong(bannedUtils.getProperties().getProperty("time-end")))), false);
+
+                    event.getChannel().sendMessage(embed.build()).queue();
+                } else {
+                    embed.setColor(new Color(226, 226, 226));
+                    embed.setTitle(bannedUtils.getUser().getName() + " isn't accused!");
+                    event.getChannel().sendMessage(embed.build()).queue();
+                }
 
             } else {
 
@@ -145,7 +169,8 @@ public class bannedCommand implements Command {
 
                     builder.append("**You'll get unbanned till: **").append(f.format(new Date(finalElapsedTime)));
                     t.sendMessage(embed.build()).queue();
-                    bannedUtils.build(date, new Date(finalElapsedTime), bannedUtils.getRsa().getKey());
+                    bannedUtils.getProfile().getProfileProperties().setProperty("banned-ticket", bannedUtils.getRsa().getKey());
+                    bannedUtils.build(date, new Date(finalElapsedTime), bannedUtils.getRsa().getKey(), reason.toString());
                 });
 
                 EmbedBuilder e = new EmbedBuilder();

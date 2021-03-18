@@ -2,7 +2,6 @@ package system.Objects.Utils;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
-import system.Objects.Utils.BoosterUtils.Booster;
 
 import java.io.*;
 import java.util.Properties;
@@ -31,8 +30,8 @@ public final class coinsManager {
 
     public coinsManager(User user) {
         this.user = user;
-        this.file = new File("System/coinsSystem");
-        this.userFiles = new File("System/coinsSystem/Users/"+user.getId()+".properties");
+        this.file = new File("system/coinsSystem");
+        this.userFiles = new File("system/coinsSystem/Users/" +user.getId()+".properties");
         this.properties = new Properties();
         createFile();
         this.coins = Integer.parseInt(getProperties().getProperty("Coins"));
@@ -41,8 +40,8 @@ public final class coinsManager {
 
     public coinsManager(Guild guild) {
         this.guild = guild;
-        this.file = new File("System/coinsSystem");
-        this.guildFiles = new File("System/coinsSystem/Guilds/"+guild.getId()+".properties");
+        this.file = new File("system/coinsSystem");
+        this.guildFiles = new File("system/coinsSystem/Guilds/" +guild.getId()+".properties");
         this.properties = new Properties();
         createGuildFile();
         this.coins = Integer.parseInt(this.properties.getProperty("Coins"));
@@ -61,7 +60,7 @@ public final class coinsManager {
 
     // getting file by user
     public File getUserFiles(User user) {
-        return new File("System/coinsSystem/Users/"+user.getId()+".properties");
+        return new File("system/coinsSystem/Users/" +user.getId()+".properties");
     }
     /*********************/
 
@@ -75,7 +74,7 @@ public final class coinsManager {
     }
 
     public File getGuildFiles(Guild guild) {
-        return new File("System/coinsSystem/Guilds/"+guild.getId()+".properties");
+        return new File("system/coinsSystem/Guilds/" +guild.getId()+".properties");
     }
     /*********************/
 

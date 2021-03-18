@@ -8,11 +8,9 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import system.Objects.Category;
 import system.Objects.Command;
 import system.Objects.TextUtils.MessageUtils;
-import system.Objects.Utils.ProfileConfigUtils.ProfileBuilder;
 
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -47,8 +45,8 @@ public class rpcGame implements Command {
             return;
         }
 
-        File order = new File("System/GamerpcGame");
-        File file = new File("System/Game/rpcGame", event.getAuthor().getId() + ".properties");
+        File order = new File("system/GamerpcGame");
+        File file = new File("system/Game/rpcGame", event.getAuthor().getId() + ".properties");
 
         FileReader reader = null;
         try {
@@ -86,7 +84,7 @@ public class rpcGame implements Command {
 
             }
             try {
-                p.save(new FileOutputStream("System/Game/rpcGame/" + event.getAuthor().getId() + ".properties"), null);
+                p.save(new FileOutputStream("system/Game/rpcGame/" + event.getAuthor().getId() + ".properties"), null);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -138,7 +136,7 @@ public class rpcGame implements Command {
 
     public static void save(User user) {
         try {
-            p.save(new FileOutputStream("System/Game/rpcGame/" + user.getId() + ".properties"), null);
+            p.save(new FileOutputStream("system/Game/rpcGame/" + user.getId() + ".properties"), null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

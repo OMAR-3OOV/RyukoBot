@@ -11,7 +11,7 @@ public class SuggestManager {
 
     private File suggestFile;
     private File suggestFileUser;
-    private File suggestFileSettings = new File("System/Suggest/settings.properties");
+    private File suggestFileSettings = new File("system/Suggest/settings.properties");
 
     private Properties properties;
     private Properties psettings;
@@ -22,7 +22,7 @@ public class SuggestManager {
     private final List<String> voteList = new ArrayList<>();
 
     public SuggestManager() {
-        this.suggestFile = new File("System/Suggest");
+        this.suggestFile = new File("system/Suggest");
         this.psettings = new Properties();
         this.properties = new Properties();
         build();
@@ -31,8 +31,8 @@ public class SuggestManager {
     public SuggestManager(User user) {
         this.user = user;
         this.id = generateSuggestId();
-        this.suggestFileUser = new File("System/Suggest/Suggestions/" + getId() + ".properties");
-        this.suggestFileSettings = new File("System/Suggest/settings.properties");
+        this.suggestFileUser = new File("system/Suggest/Suggestions/" + getId() + ".properties");
+        this.suggestFileSettings = new File("system/Suggest/settings.properties");
         this.properties = new Properties();
         this.psettings = new Properties();
 

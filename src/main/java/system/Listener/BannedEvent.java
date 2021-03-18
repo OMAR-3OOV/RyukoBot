@@ -50,6 +50,7 @@ public class BannedEvent extends ListenerAdapter {
                                     builder.append("**You banned date was in: **").append(new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss a").format(date));
 
                                     embed.setFooter("Banned was by: " + event.getJDA().getUserById(bannedUtils.getProperties().getProperty("banned-by")).getName());
+                                    userBan.getProfile().getProfileProperties().remove("banned-ticket");
 
                                     u.sendMessage(embed.build()).queue();
                                 });

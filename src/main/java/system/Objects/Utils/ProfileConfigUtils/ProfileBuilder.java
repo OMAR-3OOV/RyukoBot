@@ -11,7 +11,7 @@ public class ProfileBuilder {
     private User user;
 
     // Files
-    private final File settingsFolder = new File("System/Profiles/Settings.properties");
+    private final File settingsFolder = new File("system/Profiles/Settings.properties");
     private File profilefolder;
 
     // Properties
@@ -27,7 +27,7 @@ public class ProfileBuilder {
 
         this.user = user;
 
-        this.profilefolder = new File("System/Profiles/Users/" + user.getId() + ".properties");
+        this.profilefolder = new File("system/Profiles/Users/" + user.getId() + ".properties");
 
         buildProfile(this.profilefolder, this.profileProperties);
         buildSettings(this.settingsFolder, this.settingsProperties);

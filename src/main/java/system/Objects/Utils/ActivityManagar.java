@@ -25,7 +25,7 @@ public final class ActivityManagar {
     public ActivityManagar(Guild guild, User user) {
         this.user = user;
         this.guild = guild;
-        this.activitiesFile = new File("System/Activities/Users/" + getUser().getId() + ".properties");
+        this.activitiesFile = new File("system/Activities/Users/" + getUser().getId() + ".properties");
         this.properties = new Properties();
         create();
         this.activity = Integer.parseInt(this.properties.getProperty(user.getId()));

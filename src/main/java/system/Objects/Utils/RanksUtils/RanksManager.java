@@ -28,10 +28,10 @@ public class RanksManager {
     // create ranks file
 
     public RanksManager() {
-        this.mainFile = new File("System/RyukoSystem");
-        this.SettingsFile = new File("System/RyukoSystem/Settings.properties");
-        this.RanksFile = new File("System/RyukoSystem/Ranks/"+ ranks.getName() + ".properties");
-        this.ProfileFile = new File("System/RyukoSystem/Profile");
+        this.mainFile = new File("system/RyukoSystem");
+        this.SettingsFile = new File("system/RyukoSystem/Settings.properties");
+        this.RanksFile = new File("system/RyukoSystem/Ranks/" + ranks.getName() + ".properties");
+        this.ProfileFile = new File("system/RyukoSystem/Profile");
 
         this.SettingsProperties = new Properties();
         this.RanksProperties = new Properties();
@@ -45,10 +45,10 @@ public class RanksManager {
     public RanksManager(User user) {
         this.user = user;
 
-        this.mainFile = new File("System/RyukoSystem");
-        this.SettingsFile = new File("System/RyukoSystem/Settings.properties");
-        this.RanksFile = new File("System/RyukoSystem/Ranks/"+ ranks.getName() + ".properties");
-        this.ProfileFile = new File("System/RyukoSystem/Profile/"+user.getId()+".properties");
+        this.mainFile = new File("system/RyukoSystem");
+        this.SettingsFile = new File("system/RyukoSystem/Settings.properties");
+        this.RanksFile = new File("system/RyukoSystem/Ranks/" + ranks.getName() + ".properties");
+        this.ProfileFile = new File("system/RyukoSystem/Profile/" +user.getId()+".properties");
 
         this.SettingsProperties = new Properties();
         this.RanksProperties = new Properties();

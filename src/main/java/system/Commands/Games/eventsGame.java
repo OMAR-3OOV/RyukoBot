@@ -111,11 +111,11 @@ public class eventsGame implements Command {
                         }
 
                         // File System
-                        File order = new File("System/Game/");
-                        File eventsFile = new File("System/Game/events");
-                        File gameFile = new File("System/Game/events/numbersGame");
-                        File guildsFile = new File("System/Game/events/numbersGame/Guilds/" + event.getGuild().getId());
-                        File file = new File("System/Game/events/numbersGame/Guilds/" + event.getGuild().getId() + "/Settings.properties");
+                        File order = new File("system/Game/");
+                        File eventsFile = new File("system/Game/events");
+                        File gameFile = new File("system/Game/events/numbersGame");
+                        File guildsFile = new File("system/Game/events/numbersGame/Guilds/" + event.getGuild().getId());
+                        File file = new File("system/Game/events/numbersGame/Guilds/" + event.getGuild().getId() + "/Settings.properties");
                         FileReader reader = null;
 
 
@@ -165,7 +165,7 @@ public class eventsGame implements Command {
                             }
                         }
 
-                        File file_ = new File("System/Game/events/numbersGame/Guilds/" + event.getGuild().getId() + "/Settings.properties");
+                        File file_ = new File("system/Game/events/numbersGame/Guilds/" + event.getGuild().getId() + "/Settings.properties");
                         if (file_.exists()) {
                             FileReader reader_ = null;
                             try {
@@ -244,7 +244,7 @@ public class eventsGame implements Command {
                             int gameID = generationRandomNumber(10000, 99999);
                             int gameKey = 0;
 
-                            File file_ = new File("System/Game/events/numbersGame/Guilds/" + event.getGuild().getId() + "/Settings.properties");
+                            File file_ = new File("system/Game/events/numbersGame/Guilds/" + event.getGuild().getId() + "/Settings.properties");
                             if (args.size() >= 3) {
 
                                 gameKey = generationRandomNumber(100, 999);
