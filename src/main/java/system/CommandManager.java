@@ -16,6 +16,8 @@ import system.Commands.FunCategory.animeCommand;
 import system.Commands.Games.eventsGame;
 import system.Commands.Games.rpcGame;
 import system.Commands.NsfwCategory.NekoCommand;
+import system.Commands.NsfwCategory.Rule34Command;
+import system.Commands.NsfwCategory.SafeBooruCommand;
 import system.Commands.informationCategory.profileCommand;
 import system.Commands.minecraftCategory.HypixelCommand;
 import system.Commands.minecraftCategory.MinecraftNameListCommand;
@@ -73,6 +75,9 @@ public class CommandManager {
         addCommand(new reactionMessageCommand());
         addCommand(new testcommand());
         addCommand(new NekoCommand());
+        addCommand(new Rule34Command());
+        addCommand(new SafeBooruCommand());
+        addCommand(new GelBooruCommand());
 
         // Add category
         addCategory(Category.MANAGEMENT);
