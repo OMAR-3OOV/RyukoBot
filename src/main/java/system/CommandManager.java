@@ -77,7 +77,6 @@ public class CommandManager {
         addCommand(new NekoCommand());
         addCommand(new Rule34Command());
         addCommand(new SafeBooruCommand());
-        addCommand(new GelBooruCommand());
 
         // Add category
         addCategory(Category.MANAGEMENT);
