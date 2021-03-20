@@ -19,10 +19,7 @@ import system.Commands.NsfwCategory.NekoCommand;
 import system.Commands.NsfwCategory.Rule34Command;
 import system.Commands.NsfwCategory.SafeBooruCommand;
 import system.Commands.informationCategory.profileCommand;
-import system.Commands.minecraftCategory.HypixelCommand;
-import system.Commands.minecraftCategory.MinecraftNameListCommand;
-import system.Commands.minecraftCategory.OptifineVersionsListCommand;
-import system.Commands.minecraftCategory.skywarsCommand;
+import system.Commands.minecraftCategory.*;
 import system.Commands.informationCategory.readCommand;
 import system.Commands.Administration.bannedCommand;
 import system.Commands.testcommand;
@@ -77,6 +74,7 @@ public class CommandManager {
         addCommand(new NekoCommand());
         addCommand(new Rule34Command());
         addCommand(new SafeBooruCommand());
+        addCommand(new HypixelGuildCommand());
 
         // Add category
         addCategory(Category.MANAGEMENT);
