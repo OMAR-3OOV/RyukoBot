@@ -19,6 +19,12 @@ public class BarUtil {
 
     }
 
+    /**
+     *
+     * Builder consumer for class
+     * @param onBuild to put class details on consumer
+     * @return to class
+     */
     public BarUtil build(@NotNull Consumer<BarUtil> onBuild) {
         onBuild.accept(this);
         return instance;
@@ -44,6 +50,10 @@ public class BarUtil {
         this.task = task;
     }
 
+    /**
+     *
+     * @param total to total bar index
+     */
     @Contract(pure = true)
     public void setTotal(float total) {
         if (total < 0) {
@@ -53,6 +63,10 @@ public class BarUtil {
         this.total = total;
     }
 
+    /**
+     *
+     * @param barIndex to bar index
+     */
     @Contract(pure = true)
     public void setBarIndex(float barIndex) {
         if (barIndex < 0) {

@@ -71,7 +71,7 @@ public class HypixelGuildCommand implements IGuildLeveling, Command {
                         c = new Color(255, 225, 0);
                         break;
                     default:
-                        c = new Color(0, 0, 0);
+                        c = new Color(255, 255, 255);
                         break;
                 }
 
@@ -107,12 +107,12 @@ public class HypixelGuildCommand implements IGuildLeveling, Command {
 
     @Override
     public String getHelp() {
-        return "r!hypixelguild <guild-name>";
+        return "r!guild <guild-name>";
     }
 
     @Override
     public String getInVoke() {
-        return "hypixelguild";
+        return "guild";
     }
 
     @Override
