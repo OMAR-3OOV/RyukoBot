@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 @NotNull
+/**
+ * created by: OMAR
+ */
 public class BarUtil {
 
     public static final BarUtil instance = new BarUtil();
