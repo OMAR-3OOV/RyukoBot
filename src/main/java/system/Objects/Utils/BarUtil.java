@@ -7,10 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 @NotNull
-/**
- * date : 2021 / 20 / 3
- * created by: OMAR
- */
 public class BarUtil {
 
     public static final BarUtil instance = new BarUtil();
