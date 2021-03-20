@@ -79,7 +79,6 @@ public class BarUtil {
     @Contract(pure = true)
     public String displayTaskBar(float total, float barIndex) {
 
-
         String display = StringsKt.repeat("█", (int) Math.round(total)) + StringsKt.repeat("░", (int) (barIndex - Math.round(total)));
 
         if (display.isEmpty()) {
