@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.github.marlonlom.utilities.timeago.TimeAgoMessages;
 import me.duncte123.botcommons.web.WebUtils;
-import me.kbrewster.exceptions.APIException;
 import me.kbrewster.hypixelapi.HypixelAPI;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.intellij.lang.annotations.Language;
 import system.Objects.Category;
 import system.Objects.Command;
 import system.Objects.Config;
@@ -18,12 +16,8 @@ import system.Objects.StringsUtils.StringX;
 import system.Objects.TextUtils.MessageUtils;
 
 import java.awt.*;
-import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -55,7 +49,7 @@ public class HypixelCommand implements Command {
         }
 
         if (args.get(0).chars().count() > 16) {
-            msg.editMessage(new MessageUtils(":question: - **did you forget the limit in minecraft characters name is 16 Chars?**").EmojisHolder()).queue();
+            msg.editMessage(new MessageUtils(":question: - **The limit of minecraft username is 16 characters only?**").EmojisHolder()).queue();
             return;
         }
 
@@ -93,7 +87,7 @@ public class HypixelCommand implements Command {
                         LASTLOGIN = hypixel.get("player").get("lastLogin").asLong();
 
                         /* Calculate  */
-                        int exp = hypixel.get("player").path("networkExp").asInt();
+                        double exp = (Math.sqrt((2 * NEWTWORKLEVEL) + 30625) / 50) - 2.5;
 
                         DecimalFormat decimalFormat = new DecimalFormat("#,##0.##");
                         /* Date's */
@@ -761,7 +755,7 @@ public class HypixelCommand implements Command {
                         }
                         embed.addField("**__Guild__**", "> " + this.guild + guildRank, true);
                         embed.addBlankField(true);
-                        embed.addField("**__Level__**", "> " + decimalFormat.format(NEWTWORKLEVEL), true);
+                        embed.addField("**__Level__**", "> " + decimalFormat.format(exp), true);
                         embed.addField("**__Karma__**", "> " + decimalFormat.format(hypixel.get("player").path("karma").asInt()), true);
                         embed.addBlankField(true);
                         embed.addField("**__Achievements Points__**", "> " + decimalFormat.format(hypixel.get("player").path("achievementPoints").asInt()), true);
