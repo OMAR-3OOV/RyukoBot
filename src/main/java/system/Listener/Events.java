@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageUpdateEvent;
+import net.dv8tion.jda.api.events.message.priv.react.PrivateMessageReactionAddEvent;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -34,6 +35,7 @@ import system.Constants;
 import system.Objects.Config;
 import system.Objects.TextUtils.MessageUtils;
 import system.Objects.Utils.ActivityManagar;
+import system.Objects.Utils.Administration.HelpPagesUtil;
 import system.Objects.Utils.BoosterUtils.Booster;
 import system.Objects.Utils.BoosterUtils.BoosterManagement;
 import system.Objects.Utils.LastWinnersEvent;
@@ -107,7 +109,7 @@ public final class Events extends ListenerAdapter {
                     if (CommandManager.commandCooldown.containsKey(user)) {
                         try {
                             CommandManager.commandCooldown.entrySet().forEach(k -> {
-                                k.setValue(k.getValue()-1);
+                                k.setValue(k.getValue() - 1);
                                 if (k.getValue() <= 0) {
                                     CommandManager.commandCooldown.remove(user);
                                     CommandManager.cooldownCount.remove(user);
@@ -120,6 +122,21 @@ public final class Events extends ListenerAdapter {
                 });
             }
         }, (1000), 1000);
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                event.getJDA().getUsers().forEach(user -> {
+                    if (SendPrivateMessageCommand.fileFunction != null) {
+                        if (SendPrivateMessageCommand.fileFunction.containsKey(user)) {
+                            if (SendPrivateMessageCommand.fileFunction.get(user) != null) {
+                                SendPrivateMessageCommand.fileFunction.get(user).delete();
+                            }
+                        }
+                    }
+                });
+            }
+        }, (1000 * 2 * 60), (1000 * 2 * 60));
 
         LOGGER.info("I'm in " + event.getGuildTotalCount() + " Guild");
     }
@@ -250,6 +267,7 @@ public final class Events extends ListenerAdapter {
             message.addReaction("✏").queue();
             getterchat.lastMessage.put(getterchat.getGetter(), message);
             getterchat.getLastBotMessages().add(event.getMessage());
+            getterchat.setGetterMessage(message);
 
         }
     }
@@ -261,6 +279,32 @@ public final class Events extends ListenerAdapter {
         if (privateChat != null) {
             if (privateChat.lastMessage.containsKey(privateChat.getGetter())) {
                 privateChat.lastMessage.get(event.getAuthor()).editMessage("> **" + event.getAuthor().getName() + ": **" + event.getMessage().getContentRaw() + " `edited`").queue();
+            }
+        }
+    }
+
+    @Override
+    public void onPrivateMessageReactionAdd(@NotNull PrivateMessageReactionAddEvent event) {
+        if (SendPrivateMessageCommand.fileFunction != null) {
+            if (SendPrivateMessageCommand.fileFunction.containsKey(event.getUser())) {
+                switch(event.getReactionEmote().getName()) {
+                    case "✅":
+                        EmbedBuilder embed = new EmbedBuilder();
+
+                        embed.setColor(new Color(211, 211, 211));
+                        embed.setDescription(new MessageUtils(":successful: all messages has been saved!").EmojisHolder());
+                        SendPrivateMessageCommand.fileFunction.remove(event.getUser());
+                        SendPrivateMessageCommand.fileFunctionMsg.get(event.getUser()).editMessage(embed.build()).queue();
+                        SendPrivateMessageCommand.fileFunctionMsg.get(event.getUser()).clearReactions().queue();
+                        break;
+                    case "❌":
+                        SendPrivateMessageCommand.fileFunction.get(event.getUser()).delete();
+                        SendPrivateMessageCommand.fileFunction.remove(event.getUser());
+                        SendPrivateMessageCommand.fileFunctionMsg.get(event.getUser()).delete().queue();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -284,35 +328,18 @@ public final class Events extends ListenerAdapter {
                         if (SendPrivateMessageCommand.privatechat.get(event.getAuthor()).getChannel() == event.getChannel()) {
 
                             PrivateChat privateChat = SendPrivateMessageCommand.privatechat.get(event.getAuthor());
-                            PrivateChat getterChat = SendPrivateMessageCommand.getterchat.get(event.getAuthor());
 
                             privateChat.getGetter().openPrivateChannel().queue((u) -> {
                                 if (privateChat.editMessage.containsKey(event.getAuthor())) {
                                     privateChat.getLastBotMessages().get(privateChat.getLastBotMessages().size() - 1).editMessage(new PrivateChatFilterManager(event.getMessage().getContentRaw()).toFilter(u.getUser())).queue();
 
-                                    // clear reactions from old message
-                                    privateChat.getSenderMessage().clearReactions().queue();
-
-                                    // delete old message
                                     privateChat.getSenderMessage().delete().queue();
+
                                     // set new message
                                     privateChat.setSenderMessage(event.getMessage());
                                     privateChat.getSenderMessage().addReaction("\uD83D\uDD27").queue();
 
                                     privateChat.editMessage.remove(event.getAuthor());
-                                    return;
-                                }
-
-                                if (privateChat.replyMessage.containsKey(event.getAuthor())) {
-                                    getterChat.getLastBotMessages().get(getterChat.getLastBotMessages().size() - 1).reply(new PrivateChatFilterManager(event.getMessage().getContentRaw()).toFilter(u.getUser())).queue();
-
-                                    getterChat.lastMessage.get(privateChat.getGetter()).clearReactions().queue();
-                                    privateChat.getSenderMessage().clearReactions().queue();
-                                    privateChat.setSenderMessage(event.getMessage());
-
-                                    privateChat.getSenderMessage().addReaction("\uD83D\uDD27").queue();
-
-                                    privateChat.replyMessage.remove(event.getAuthor());
                                     return;
                                 }
 
@@ -330,56 +357,6 @@ public final class Events extends ListenerAdapter {
 
                                 privateChat.getSenderMessage().addReaction("\uD83D\uDD27").queue();
                             });
-
-                            // old code
-                            {
-//                        SendPrivateMessageCommand.privateEvent.keySet().forEach((user -> {
-//                            user.openPrivateChannel().queue((u) -> {
-//                                if (editMessage.containsKey(event.getAuthor())) {
-//                                    SendPrivateMessageCommand.lastBotMessages.get(SendPrivateMessageCommand.lastBotMessages.size() - 1).editMessage(new PrivateChatFilterManager(event.getMessage().getContentRaw()).toFilter(u.getUser())).queue();
-//
-//                                    SendPrivateMessageCommand.privateFunctions.get(event.getAuthor()).clearReactions().queue();
-//                                    SendPrivateMessageCommand.privateFunctions.put(event.getAuthor(), event.getMessage());
-//
-//                                    event.getMessage().addReaction("\uD83D\uDD27").queue();
-//                                    event.getMessage().addReaction("❌").queue();
-//
-//                                    editMessage.remove(event.getAuthor());
-//                                    return;
-//                                }
-//
-//                                if (replyMessage.containsKey(event.getAuthor())) {
-//                                    SendPrivateMessageCommand.lastBotMessages.get(SendPrivateMessageCommand.lastBotMessages.size() - 1).reply(new PrivateChatFilterManager(event.getMessage().getContentRaw()).toFilter(u.getUser())).queue();
-//
-//                                    lastMessage.get(SendPrivateMessageCommand.privateEvent.keySet().stream().findFirst().get()).clearReactions().queue();
-//                                    SendPrivateMessageCommand.privateFunctions.get(event.getAuthor()).clearReactions().queue();
-//                                    SendPrivateMessageCommand.privateFunctions.put(event.getAuthor(), event.getMessage());
-//
-//                                    event.getMessage().addReaction("\uD83D\uDD27").queue();
-//                                    event.getMessage().addReaction("❌").queue();
-//
-//                                    replyMessage.remove(event.getAuthor());
-//                                    return;
-//                                }
-//
-//                                Message message;
-//
-//                                if (event.getMessage().getAttachments().stream().anyMatch(Message.Attachment::isImage) || event.getMessage().getAttachments().stream().anyMatch(Message.Attachment::isVideo) || event.getMessage().getAttachments().stream().anyMatch(Message.Attachment::isSpoiler)) {
-//                                    message = u.sendMessage(new PrivateChatFilterManager(event.getMessage().getContentRaw()).toFilter(u.getUser()) + "\n " + event.getMessage().getAttachments().stream().map(Message.Attachment::getUrl).collect(Collectors.joining())).complete();
-//                                } else {
-//                                    message = u.sendMessage(new PrivateChatFilterManager(event.getMessage().getContentRaw()).toFilter(u.getUser())).complete();
-//                                }
-//
-//                                SendPrivateMessageCommand.privateFunctions.get(event.getAuthor()).clearReactions().queue();
-//
-//                                SendPrivateMessageCommand.privateFunctions.put(event.getAuthor(), event.getMessage());
-//                                SendPrivateMessageCommand.lastBotMessages.add(message);
-//
-//                                event.getMessage().addReaction("\uD83D\uDD27").queue();
-//                                event.getMessage().addReaction("❌").queue();
-//                            });
-//                        }));
-                            }
                         }
                     }
                 }
@@ -1196,7 +1173,7 @@ public final class Events extends ListenerAdapter {
         String checkIdhypixel = " ";
 
         PrivateChat privateChat = SendPrivateMessageCommand.privatechat.get(event.getUser());
-        PrivateChat getterChat = SendPrivateMessageCommand.getterchat.get(event.getUser());
+
         final ProfileBuilder profile = new ProfileBuilder(event.getUser());
 
         if (profileCommand.verify != null) {
@@ -1251,28 +1228,6 @@ public final class Events extends ListenerAdapter {
             if (privateChat.getChannel().getId().contains(event.getChannel().getId())) {
                 if (privateChat.getMode().getId() == PrivateChatMode.CHATTING.getId()) {
                     if (privateChat.getStarted()) {
-                        switch (event.getReactionEmote().getName()) {
-                            case "✏": // reply
-                                privateChat.replyMessage.put(event.getUser(), getterChat.lastMessage.get(getterChat.getGetter()));
-                                getterChat.lastMessage.get(privateChat.getGetter()).clearReactions().queue();
-
-                                getterChat.lastMessage.get(privateChat.getGetter()).addReaction("❌").queue();
-                                event.getReaction().removeReaction(event.getUser()).queue();
-                                break;
-                            case "❌": // cancel
-                                if (privateChat.replyMessage.containsKey(event.getUser())) {
-                                    privateChat.replyMessage.remove(event.getUser());
-
-                                    getterChat.lastMessage.get(privateChat.getGetter()).clearReactions().queue();
-                                    getterChat.lastMessage.get(privateChat.getGetter()).addReaction("✏").queue();
-                                    return;
-                                }
-                                break;
-                            default:
-                                event.getReaction().removeReaction(event.getUser()).queue();
-                                break;
-                        }
-
                         if (privateChat.getSenderMessage().getId().contains(event.getMessageId())) {
                             switch (event.getReactionEmote().getName()) {
                                 case "\uD83D\uDD27": // edit
@@ -1287,13 +1242,6 @@ public final class Events extends ListenerAdapter {
                                         privateChat.getSenderMessage().clearReactions().queue();
 
                                         privateChat.getSenderMessage().addReaction("\uD83D\uDD27").queue();
-                                        return;
-                                    }
-
-                                    if (privateChat.replyMessage.containsKey(event.getUser())) {
-                                        privateChat.replyMessage.remove(event.getUser());
-
-                                        privateChat.getSenderMessage().addReaction("✏").queue();
                                         return;
                                     }
                                     break;

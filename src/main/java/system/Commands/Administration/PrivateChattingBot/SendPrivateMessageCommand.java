@@ -12,7 +12,9 @@ import system.Objects.Utils.PrivateChatUtils.PrivateChat;
 import system.Objects.Utils.PrivateChatUtils.PrivateChatMode;
 
 import java.awt.*;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +26,9 @@ public class SendPrivateMessageCommand implements Command {
 
     public static HashMap<User, PrivateChat> privatechat = new HashMap<>();
     public static HashMap<User, PrivateChat> getterchat = new HashMap<>();
+
+    public static HashMap<User, File> fileFunction = new HashMap<>();
+    public static HashMap<User, Message> fileFunctionMsg = new HashMap<>();
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) throws FileNotFoundException {
@@ -57,7 +62,6 @@ public class SendPrivateMessageCommand implements Command {
                 // Private Util
 
                 PrivateChat privateChat = new PrivateChat(event.getAuthor(), user, event.getChannel(), event.getGuild(), event.getMessage());
-                PrivateChat getterChat = new PrivateChat(event.getAuthor(), user, event.getChannel(), null);
 
                 if (privateChat.getStarted()) {
                     event.getChannel().sendMessage(new MessageUtils(":error: You're already in private message with a user!").EmojisHolder()).queue();
@@ -65,14 +69,33 @@ public class SendPrivateMessageCommand implements Command {
                 }
 
                 privateChat.start(builder.toString());
+                privateChat.setSenderMessage(event.getMessage());
 
                 privateChat.getSenderMessage().addReaction("\uD83D\uDD27").queue();
 
                 privatechat.put(event.getAuthor(), privateChat);
-                getterchat.put(user, getterChat);
+                getterchat.put(user, privateChat);
             } else if (command.equalsIgnoreCase("close")) {
                 if (privatechat.containsKey(event.getAuthor())) {
                     event.getChannel().sendMessage(new MessageUtils(":successful: | private has been closed").EmojisHolder()).queue();
+
+                    event.getAuthor().openPrivateChannel().queue(message -> {
+                        EmbedBuilder embed = new EmbedBuilder();
+
+                        embed.setTitle(new MessageUtils("Would you like to save the message with " + privatechat.get(event.getAuthor()).getGetter().getName() + " ? :loading:").EmojisHolder());
+                        embed.setColor(new Color(188, 255, 166));
+                        embed.setDescription("> all message that you sent will saved!, you just have 2minutes to save it when the message will deleted Automatic❗, or you can deleted it quickly when you click on ❌!");
+                        embed.setFooter("\uD83D\uDDD3️ Date : " + new SimpleDateFormat("EEEE, dd MMM yyyy").format(new Date()));
+
+                        Message msg = message.sendMessage(embed.build()).complete();
+                        msg.addReaction("✅").queue();
+                        msg.addReaction("❌").queue();
+
+                        fileFunctionMsg.put(event.getAuthor(), msg);
+                    });
+
+                    fileFunction.put(event.getAuthor(), privatechat.get(event.getAuthor()).getFile());
+
                     privatechat.get(event.getAuthor()).end();
                     getterchat.remove(privatechat.get(event.getAuthor()).getGetter());
                     privatechat.remove(event.getAuthor());

@@ -3,7 +3,7 @@ package system.Objects.Utils.PrivateChatUtils;
 import net.dv8tion.jda.api.entities.*;
 import system.Commands.Administration.PrivateChattingBot.PrivateChatFilterManager;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
 public class PrivateChat {
@@ -19,10 +19,8 @@ public class PrivateChat {
     private TextChannel channel;
     private Guild guild;
 
+    private List<Message> messages;
     private List<Message> lastBotMessages;
-
-    private List<Message> senderMessages;
-    private List<Message> getterMessages;
 
     private File file;
     private Properties properties;
@@ -34,7 +32,6 @@ public class PrivateChat {
 
     // Effects
     public HashMap<User, Message> editMessage = new HashMap<>();
-    public HashMap<User, Message> replyMessage = new HashMap<>();
     public HashMap<User, Message> lastMessage = new HashMap<>();
 
     // Sender
@@ -46,19 +43,11 @@ public class PrivateChat {
         this.senderMessage = message;
         this.lastBotMessages = new ArrayList<>();
         this.code = generateFileCode();
+        this.messages = new ArrayList<>();
 
         this.mode.put(sender, PrivateChatMode.CHATTING);
         this.file = new File("system/PrivateChat/Users/" + this.code + ".properties");
         this.properties = new Properties();
-    }
-
-    // Getter
-    public PrivateChat(User sender, User getter,TextChannel channel, Message message) {
-        this.sender = sender;
-        this.getter = getter;
-        this.getterMessage = message;
-        this.channel = channel;
-        this.lastBotMessages = new ArrayList<>();
     }
 
     public User getSender() {
@@ -74,6 +63,8 @@ public class PrivateChat {
     }
 
     public void setSenderMessage(Message senderMessage) {
+        addMessage(senderMessage);
+        addFileMessage(this.sender, senderMessage);
         this.senderMessage = senderMessage;
     }
 
@@ -82,16 +73,26 @@ public class PrivateChat {
     }
 
     public void setGetterMessage(Message getterMessage) {
+        addMessage(getterMessage);
+        addFileMessage(this.getter, senderMessage);
         this.getterMessage = getterMessage;
     }
 
-    // Messages list methods
-    public List<Message> getSenderMessages() {
-        return senderMessages;
+    public void addFileMessage(User who, Message message) {
+        properties.setProperty("message."+who.getId()+"."+getMessages().size(), String.valueOf(message));
+        save();
     }
 
-    public List<Message> getGetterMessages() {
-        return getterMessages;
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void addMessage(Message message) {
+        getMessages().add(message);
+    }
+
+    public int getCode() {
+        return code;
     }
 
     public TextChannel getChannel() {
@@ -114,10 +115,6 @@ public class PrivateChat {
         return editMessage;
     }
 
-    public HashMap<User, Message> getReplyMessage() {
-        return replyMessage;
-    }
-
     public HashMap<User, Message> getLastMessage() {
         return lastMessage;
     }
@@ -137,9 +134,12 @@ public class PrivateChat {
     public void start(String msg) {
         setStarted(true);
         setMode(PrivateChatMode.CHATTING);
+        buildFileMessage(this.sender, this.getter);
 
         PrivateChannel privateChannel = getGetter().openPrivateChannel().complete();
         Message message = privateChannel.sendMessage(new PrivateChatFilterManager(msg).toFilter(getGetter())).complete();
+
+        setSenderMessage(message);
         lastBotMessages.add(message);
     }
 
@@ -155,20 +155,46 @@ public class PrivateChat {
         started = bool;
     }
 
-    private int generateFileCode() {
-        Random random = new Random();
-        int randomint = random.nextInt(99999999);
+    private void buildFileMessage(User sender, User getter) {
+        if (this.sender.isBot() || this.getter.isBot()) return;
 
-//        if (fileNameCheck(randomint) == false) {
-//            randomint = random.nextInt(99999999);
-//            return randomint;
-//        }
+        if (!this.file.getParentFile().exists()) {
+            this.file.getParentFile().mkdirs();
+        }
 
-        return randomint;
+        if (this.file.exists()) {
+            try {
+                properties.load(new FileInputStream(this.file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!this.file.exists()) {
+            try {
+                this.file.createNewFile();
+
+                properties.setProperty("UserSender", sender.getId());
+                properties.setProperty("UserGetter", sender.getId());
+
+                save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    private boolean fileNameCheck(int file) {
-        if (this.file.getName().contains(String.valueOf(file))) return false;
-        else return true;
+    public void save() {
+        try {
+            properties.save(new FileOutputStream(this.file), null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int generateFileCode() {
+        Random random = new Random();
+
+        return random.nextInt(99999999);
     }
 }
