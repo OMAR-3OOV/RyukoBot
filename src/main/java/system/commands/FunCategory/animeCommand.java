@@ -1,4 +1,4 @@
-package system.Commands.FunCategory;
+package system.commands.FunCategory;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
