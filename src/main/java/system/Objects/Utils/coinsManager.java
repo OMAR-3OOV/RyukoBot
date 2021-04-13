@@ -30,18 +30,18 @@ public final class coinsManager {
 
     public coinsManager(User user) {
         this.user = user;
-        this.file = new File("system/coinsSystem");
-        this.userFiles = new File("system/coinsSystem/Users/" +user.getId()+".properties");
+        this.file = new File("system/Profiles");
+        this.userFiles = new File("system/Profiles/Users/" +user.getId()+".properties");
         this.properties = new Properties();
         createFile();
-        this.coins = Integer.parseInt(getProperties().getProperty("Coins"));
-        this.gains = Integer.parseInt(getProperties().getProperty("Gains"));
+        this.coins = Integer.parseInt(getProperties().getProperty("ruko"));
+        this.gains = Integer.parseInt(getProperties().getProperty("gains"));
     }
 
     public coinsManager(Guild guild) {
         this.guild = guild;
-        this.file = new File("system/coinsSystem");
-        this.guildFiles = new File("system/coinsSystem/Guilds/" +guild.getId()+".properties");
+        this.file = new File("system/Profiles");
+        this.guildFiles = new File("system/Profiles/Guilds/" +guild.getId()+".properties");
         this.properties = new Properties();
         createGuildFile();
         this.coins = Integer.parseInt(this.properties.getProperty("Coins"));
@@ -60,7 +60,7 @@ public final class coinsManager {
 
     // getting file by user
     public File getUserFiles(User user) {
-        return new File("system/coinsSystem/Users/" +user.getId()+".properties");
+        return new File("system/Profiles/Users/" +user.getId()+".properties");
     }
     /*********************/
 
@@ -74,7 +74,7 @@ public final class coinsManager {
     }
 
     public File getGuildFiles(Guild guild) {
-        return new File("system/coinsSystem/Guilds/" +guild.getId()+".properties");
+        return new File("system/Profiles/Guilds/" +guild.getId()+".properties");
     }
     /*********************/
 
@@ -99,17 +99,17 @@ public final class coinsManager {
 
         if (getUserFiles().exists()) {
 
-            FileReader fileReader = null;
             try {
-                fileReader = new FileReader(userFiles);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                getProperties().load(fileReader);
+                getProperties().load(new FileInputStream(this.userFiles));
             }catch (IOException e) {
 
+            }
+
+            for (int keys = 0; keys < coinsConfig.values().length; keys++) {
+                if (properties.getProperty(coinsConfig.values()[keys].getKey()) == null) {
+                    properties.setProperty(coinsConfig.values()[keys].getKey(), "0");
+                    saveFile();
+                }
             }
         }
 
@@ -117,11 +117,9 @@ public final class coinsManager {
             try {
                 this.userFiles.createNewFile();
 
-                properties.setProperty("username", getUser().getName());
-                properties.setProperty("id", getUser().getId());
                 properties.setProperty("Gains", "0");
-                properties.setProperty("Coins", "0");
-                properties.setProperty("Booster", "null");
+                properties.setProperty("ruko", "0");
+                properties.setProperty("Booster", "0");
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -166,7 +164,7 @@ public final class coinsManager {
                 properties.setProperty("username", user.getName());
                 properties.setProperty("id", user.getId());
                 properties.setProperty("Gains", "0");
-                properties.setProperty("Coins", "0");
+                properties.setProperty("ruko", "0");
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -207,7 +205,7 @@ public final class coinsManager {
 
                 properties.setProperty("guildname", getGuild().getName());
                 properties.setProperty("id", getGuild().getId());
-                properties.setProperty("Coins", "0");
+                properties.setProperty("ruko", "0");
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -291,7 +289,7 @@ public final class coinsManager {
 
             }
 
-            return Integer.parseInt(getProperties().getProperty("Coins"));
+            return Integer.parseInt(getProperties().getProperty("ruko"));
         }
         return 0;
     }
@@ -313,7 +311,7 @@ public final class coinsManager {
 
             }
 
-            return Integer.parseInt(getProperties().getProperty("Coins"));
+            return Integer.parseInt(getProperties().getProperty("ruko"));
         }
         return 0;
     }
@@ -322,7 +320,7 @@ public final class coinsManager {
 
     // Main add
     public void addRukoUser(int amount) {
-        properties.setProperty("Coins", Integer.toString(getRukoUser()+amount));
+        properties.setProperty("ruko", Integer.toString(getRukoUser()+amount));
         properties.setProperty("Gains", Integer.toString(getRukoUser()+amount));
 
         try {
@@ -334,7 +332,7 @@ public final class coinsManager {
 
     // add ruko by guild
     public void addRukoGuild(int amount) {
-        properties.setProperty("Coins", Integer.toString(getRukoGuild()+amount));
+        properties.setProperty("ruko", Integer.toString(getRukoGuild()+amount));
 
         try {
             properties.save(new FileOutputStream(getGuildFiles()), null);
@@ -346,7 +344,7 @@ public final class coinsManager {
 
     // add ruko by user
     public void addRukoUser(User user, int amount) {
-        properties.setProperty("Coins", Integer.toString(getRukoUser(user)+amount));
+        properties.setProperty("ruko", Integer.toString(getRukoUser(user)+amount));
         properties.setProperty("Gains", Integer.toString(getRukoUser()+amount));
 
         try {
@@ -358,7 +356,7 @@ public final class coinsManager {
 
     // add ruko by guild
     public void addRukoGuild(Guild guild, int amount) {
-        properties.setProperty("Coins", Integer.toString(getRukoGuild(guild)+amount));
+        properties.setProperty("ruko", Integer.toString(getRukoGuild(guild)+amount));
 
         try {
             properties.save(new FileOutputStream(getGuildFiles(guild)), null);
@@ -370,7 +368,7 @@ public final class coinsManager {
     /*********************/
 
     public void removeRukoUser(int amount) {
-        properties.setProperty("Coins", Integer.toString(getRukoUser()-amount));
+        properties.setProperty("ruko", Integer.toString(getRukoUser()-amount));
 
         try {
             properties.save(new FileOutputStream(this.userFiles), null);
@@ -380,7 +378,7 @@ public final class coinsManager {
     }
 
     public void removeRukoUser(User user, int amount) {
-        properties.setProperty("Coins", Integer.toString(getRukoUser(user)-amount));
+        properties.setProperty("ruko", Integer.toString(getRukoUser(user)-amount));
 
         try {
             properties.save(new FileOutputStream(getUserFiles(user)), null);
@@ -390,7 +388,7 @@ public final class coinsManager {
     }
 
     public void removeRukoGuild(Guild guild, int amount) {
-        properties.setProperty("Coins", Integer.toString(getRukoGuild(guild)-amount));
+        properties.setProperty("ruko", Integer.toString(getRukoGuild(guild)-amount));
 
         try {
             properties.save(new FileOutputStream(getUserFiles(user)), null);
@@ -403,7 +401,7 @@ public final class coinsManager {
 
     // Main set user
     public void setRukoUser(int amount) {
-        properties.setProperty("Coins", Integer.toString(amount));
+        properties.setProperty("ruko", Integer.toString(amount));
 
         try {
             properties.save(new FileOutputStream(this.userFiles), null);
@@ -414,7 +412,7 @@ public final class coinsManager {
 
     // Main set Guild
     public void setRukoGuild(int amount) {
-        properties.setProperty("Coins", Integer.toString(amount));
+        properties.setProperty("ruko", Integer.toString(amount));
 
         try {
             properties.save(new FileOutputStream(getGuildFiles()), null);
@@ -427,7 +425,7 @@ public final class coinsManager {
 
     // set ruko by user
     public void setRukoUser(User user, int amount) {
-        properties.setProperty("Coins", Integer.toString(amount));
+        properties.setProperty("ruko", Integer.toString(amount));
 
         try {
             properties.save(new FileOutputStream(getUserFiles(user)), null);
@@ -438,7 +436,7 @@ public final class coinsManager {
 
     // set ruko by Guild
     public void setRukoGuild(Guild guild, int amount) {
-        properties.setProperty("Coins", Integer.toString(amount));
+        properties.setProperty("ruko", Integer.toString(amount));
 
         try {
             properties.save(new FileOutputStream(getGuildFiles(guild)), null);

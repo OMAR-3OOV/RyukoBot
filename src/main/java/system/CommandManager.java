@@ -3,32 +3,34 @@ package system;
 import com.sun.istack.Nullable;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import system.Commands.Administration.*;
-import system.Commands.Administration.PrivateChattingBot.SendPrivateMessageCommand;
-import system.Commands.Administration.Suggest.SuggestCommand;
-import system.Commands.Administration.moderatorCategory.SuggestModerator;
-import system.Commands.Administration.moderatorCategory.channelsAddonsCommands.permissionChannelCommand;
-import system.Commands.Administration.moderatorCategory.informationCommand;
-import system.Commands.Administration.moderatorCategory.reactionMessageCommand;
-import system.Commands.Administration.moderatorCategory.rolesCommand;
-import system.Commands.FunCategory.CountriesCommand;
-import system.Commands.FunCategory.animeCommand;
-import system.Commands.Games.eventsGame;
-import system.Commands.Games.rpcGame;
-import system.Commands.NsfwCategory.NekoCommand;
-import system.Commands.NsfwCategory.Rule34Command;
-import system.Commands.NsfwCategory.SafeBooruCommand;
-import system.Commands.informationCategory.profileCommand;
-import system.Commands.minecraftCategory.*;
-import system.Commands.informationCategory.readCommand;
-import system.Commands.Administration.bannedCommand;
-import system.Commands.testcommand;
+import system.commands.Administration.*;
+import system.commands.Administration.PrivateChattingBot.SendPrivateMessageCommand;
+import system.commands.Administration.Suggest.SuggestCommand;
+import system.commands.Administration.moderatorCategory.SuggestModerator;
+import system.commands.Administration.moderatorCategory.channelsAddonsCommands.permissionChannelCommand;
+import system.commands.Administration.moderatorCategory.informationCommand;
+import system.commands.Administration.moderatorCategory.reactionMessageCommand;
+import system.commands.Administration.moderatorCategory.rolesCommand;
+import system.commands.FunCategory.CountriesCommand;
+import system.commands.FunCategory.animeCommand;
+import system.commands.Games.eventsGame;
+import system.commands.Games.rpcGame;
+import system.commands.NsfwCategory.NekoCommand;
+import system.commands.NsfwCategory.Rule34Command;
+import system.commands.NsfwCategory.SafeBooruCommand;
+import system.commands.informationCategory.AchievementsCommand;
+import system.commands.informationCategory.ServerProfileIDCanvas;
+import system.commands.informationCategory.profileCommand;
+import system.commands.minecraftCategory.*;
+import system.commands.informationCategory.readCommand;
+import system.commands.Administration.bannedCommand;
+import system.commands.testcommand;
 import system.Objects.Category;
 import system.Objects.Command;
 import system.Objects.TextUtils.MessageUtils;
-import system.Objects.Utils.Administration.BannedUtils.BannedElapsedTimes;
-import system.Objects.Utils.Administration.BannedUtils.BannedUtils;
-import system.Objects.Utils.ProfileConfigUtils.ProfileBuilder;
+import system.Objects.Utils.administration.BannedUtils.BannedElapsedTimes;
+import system.Objects.Utils.administration.BannedUtils.BannedUtils;
+import system.Objects.Utils.profileconfigutils.ProfileBuilder;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -75,6 +77,10 @@ public class CommandManager {
         addCommand(new Rule34Command());
         addCommand(new SafeBooruCommand());
         addCommand(new HypixelGuildCommand());
+        addCommand(new ServerProfileIDCanvas());
+        addCommand(new deletedMessageCommand());
+        addCommand(new HypixelGuildFutureCommands());
+        addCommand(new AchievementsCommand());
 
         // Add category
         addCategory(Category.MANAGEMENT);
@@ -123,7 +129,7 @@ public class CommandManager {
         if (commands.containsKey(invoke)) {
             final List<String> args = Arrays.asList(split).subList(1, split.length);
 
-            if (!commands.get(commands.get(invoke).getInVoke()).Lockdown() || event.getAuthor().getId().equalsIgnoreCase("304609934967046144") | event.getAuthor().getId().equalsIgnoreCase("814242905908576327")) {
+            if (!commands.get(commands.get(invoke).getInVoke()).Lockdown() || event.getAuthor().getId().equalsIgnoreCase("304609934967046144") | event.getAuthor().getId().equalsIgnoreCase("814242905908576327") || event.getAuthor().getId().equalsIgnoreCase("427259177514303499")) {
 
                 if (profile.getBanned()) {
                     event.getChannel().sendMessage("⛔ | **You're currently blacklist**, `you can apply for unbanned application in our server`").queue();

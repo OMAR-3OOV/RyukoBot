@@ -21,29 +21,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mdashlw.hypixel.entities.player.stats.SkyWars;
 import system.CommandManager;
-import system.Commands.Administration.PrivateChattingBot.PrivateChatFilterManager;
-import system.Commands.Administration.PrivateChattingBot.SendPrivateMessageCommand;
-import system.Commands.Administration.rukoCommand;
-import system.Commands.Administration.shopCommand;
-import system.Commands.Administration.verifyCommand;
-import system.Commands.Games.eventsGame;
-import system.Commands.Games.eventsGames.numbersGame;
-import system.Commands.Games.rpcGame;
-import system.Commands.informationCategory.profileCommand;
-import system.Commands.minecraftCategory.skywarsCommand;
+import system.commands.Administration.PrivateChattingBot.PrivateChatFilterManager;
+import system.commands.Administration.PrivateChattingBot.SendPrivateMessageCommand;
+import system.commands.Administration.rukoCommand;
+import system.commands.Administration.shopCommand;
+import system.commands.Administration.verifyCommand;
+import system.commands.Games.eventsGame;
+import system.commands.Games.eventsGames.numbersGame;
+import system.commands.Games.rpcGame;
+import system.commands.informationCategory.profileCommand;
+import system.commands.minecraftCategory.skywarsCommand;
 import system.Constants;
 import system.Objects.Config;
 import system.Objects.TextUtils.MessageUtils;
 import system.Objects.Utils.ActivityManagar;
-import system.Objects.Utils.Administration.HelpPagesUtil;
-import system.Objects.Utils.BoosterUtils.Booster;
-import system.Objects.Utils.BoosterUtils.BoosterManagement;
+import system.Objects.Utils.boosterutils.Booster;
+import system.Objects.Utils.boosterutils.BoosterManagement;
 import system.Objects.Utils.LastWinnersEvent;
-import system.Objects.Utils.PrivateChatUtils.PrivateChat;
-import system.Objects.Utils.PrivateChatUtils.PrivateChatMode;
-import system.Objects.Utils.ProfileConfigUtils.ProfileBuilder;
+import system.Objects.Utils.privatechatutils.PrivateChat;
+import system.Objects.Utils.privatechatutils.PrivateChatMode;
+import system.Objects.Utils.profileconfigutils.ProfileBuilder;
 import system.Objects.Utils.RandomStringAPI;
 import system.Objects.Utils.coinsManager;
+import system.Objects.Utils.levelUtils.LevelsManager;
 import system.Objects.Versions;
 
 import javax.imageio.ImageIO;
@@ -287,9 +287,11 @@ public final class Events extends ListenerAdapter {
     public void onPrivateMessageReactionAdd(@NotNull PrivateMessageReactionAddEvent event) {
         if (SendPrivateMessageCommand.fileFunction != null) {
             if (SendPrivateMessageCommand.fileFunction.containsKey(event.getUser())) {
+
+                EmbedBuilder embed = new EmbedBuilder();
+
                 switch(event.getReactionEmote().getName()) {
                     case "✅":
-                        EmbedBuilder embed = new EmbedBuilder();
 
                         embed.setColor(new Color(211, 211, 211));
                         embed.setDescription(new MessageUtils(":successful: all messages has been saved!").EmojisHolder());
@@ -300,7 +302,12 @@ public final class Events extends ListenerAdapter {
                     case "❌":
                         SendPrivateMessageCommand.fileFunction.get(event.getUser()).delete();
                         SendPrivateMessageCommand.fileFunction.remove(event.getUser());
-                        SendPrivateMessageCommand.fileFunctionMsg.get(event.getUser()).delete().queue();
+
+                        embed.setColor(new Color(255,0,0));
+                        embed.setTitle("Message deleted");
+                        embed.setDescription("Everything has been deleted!");
+
+                        SendPrivateMessageCommand.fileFunctionMsg.get(event.getUser()).editMessage(embed.build()).queue();
                         break;
                     default:
                         break;
@@ -317,6 +324,7 @@ public final class Events extends ListenerAdapter {
 
         ActivityManagar activityManagar = new ActivityManagar(event.getGuild(), event.getAuthor());
         ProfileBuilder profile = new ProfileBuilder(event.getAuthor());
+        LevelsManager levelsManager = new LevelsManager(event.getAuthor());
 
         numbersGame numbersGame = eventsGame.game;
         prefix = Constants.PREFIX;
@@ -766,7 +774,7 @@ public final class Events extends ListenerAdapter {
 
                         try {
                             numbersGame n_game = new numbersGame("numbers_" + event.getGuild(), event.getGuild(), event.getChannel(), df.parse(String.valueOf(gameID)).intValue(), gameKey, eventsGame.getRoleMap.get(event.getAuthor()), 3, Objects.requireNonNull(event.getGuild().getRoleById(role)).getManager().getRole(), format.format(date));
-                            system.Commands.Games.eventsGames.numbersGame.numbersStart.put(n_game.getGuild(), n_game);
+                            system.commands.Games.eventsGames.numbersGame.numbersStart.put(n_game.getGuild(), n_game);
                             numbersGame n1 = n_game.getNumbersStart().get(event.getGuild());
 
                             EmbedBuilder gameMessage = new EmbedBuilder();
@@ -955,7 +963,7 @@ public final class Events extends ListenerAdapter {
                         String boostertext = " ";
                         Booster.loadBoosters();
 
-                        if (!ruko.getProperties().getProperty("Booster").contains("null")) {
+                        if (!ruko.getProperties().getProperty("booster").contains("0")) {
                             boostertext = "> **Ruko Booster \uD83D\uDE80 :** " + Booster.getBooster().get(Integer.parseInt(ruko.getProperties().getProperty("Booster"))).getName() + " x" + Booster.getBooster().get(Integer.parseInt(ruko.getProperties().getProperty("Booster"))).getCombo() + "\n";
                         }
 
@@ -1060,8 +1068,8 @@ public final class Events extends ListenerAdapter {
                         String boostertext = " ";
                         Booster.loadBoosters();
 
-                        if (!ruko.getProperties().getProperty("Booster").contains("null")) {
-                            boostertext = "> **Ruko Booster \uD83D\uDE80 :** " + Booster.getBooster().get(Integer.parseInt(ruko.getProperties().getProperty("Booster"))).getName() + " x" + Booster.getBooster().get(Integer.parseInt(ruko.getProperties().getProperty("Booster"))).getCombo() + "\n";
+                        if (!ruko.getProperties().getProperty("booster").contains("0")) {
+                            boostertext = "> **Ruko Booster \uD83D\uDE80 :** " + Booster.getBooster().get(Integer.parseInt(ruko.getProperties().getProperty("booster"))).getName() + " x" + Booster.getBooster().get(Integer.parseInt(ruko.getProperties().getProperty("booster"))).getCombo() + "\n";
                         }
 
                         embed.setColor(new Color(red, green, blue));
@@ -1124,7 +1132,6 @@ public final class Events extends ListenerAdapter {
         }
 
         coinsManager ruko = new coinsManager(event.getAuthor());
-
         int calculation = (int) (activityManagar.getActivity() * (0.25));
 
         if (raw.equalsIgnoreCase(prefix + "claim")) {
@@ -1297,8 +1304,8 @@ public final class Events extends ListenerAdapter {
                 String boostertext = " ";
                 Booster.loadBoosters();
 
-                if (!ruko.getProperties().getProperty("Booster").contains("null")) {
-                    boostertext = "> **Ruko Booster \uD83D\uDE80 :** " + Booster.getBooster().get(Integer.parseInt(ruko.getProperties().getProperty("Booster"))).getName() + " x" + Booster.getBooster().get(Integer.parseInt(ruko.getProperties().getProperty("Booster"))).getCombo() + "\n";
+                if (!ruko.getProperties().getProperty("booster").contains("0")) {
+                    boostertext = "> **Ruko Booster \uD83D\uDE80 :** " + Booster.getBooster().get(Integer.parseInt(ruko.getProperties().getProperty("booster"))).getName() + " x" + Booster.getBooster().get(Integer.parseInt(ruko.getProperties().getProperty("booster"))).getCombo() + "\n";
                 }
 
                 embed.setColor(new Color(red, green, blue));
@@ -1422,7 +1429,7 @@ public final class Events extends ListenerAdapter {
                 switch (event.getReactionEmote().getName()) {
                     case "\uD83D\uDFE7":
                         embed.clearFields();
-                        if (ruko.getProperties().getProperty("Booster").contains(Integer.toString(BoosterManagement.BOOSTER_TREBLE.getId()))) {
+                        if (ruko.getProperties().getProperty("booster").contains(Integer.toString(BoosterManagement.BOOSTER_TREBLE.getId()))) {
                             embed.addField(" ", "`❌ Your payment has been refusal ( You already have highest booster )`", false);
                         } else if (ruko.getProperties().getProperty("Booster").contains(Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()))) {
                             embed.addField(" ", "`❌ Your payment has been refusal ( You already have highest booster )`", false);
@@ -1435,7 +1442,7 @@ public final class Events extends ListenerAdapter {
                             if (ruko.getRukoUser() < count) {
                                 embed.addField(" ", "`❌ Your payment has been successful ( You don't have enough ruko )`", false);
                             } else {
-                                ruko.addProperty("Booster", Integer.toString(BoosterManagement.BOOSTER_DOUBLE.getId()));
+                                ruko.addProperty("booster", Integer.toString(BoosterManagement.BOOSTER_DOUBLE.getId()));
                                 ruko.removeRukoUser(count);
 
                                 embed.addField(" ", new MessageUtils("`✅ Your payment has been successful ( Booster x2 )` -" + count + " :ruko:").EmojisHolder(), false);
@@ -1446,20 +1453,20 @@ public final class Events extends ListenerAdapter {
                         break;
                     case "\uD83D\uDFEA":
                         embed.clearFields();
-                        if (ruko.getProperties().getProperty("Booster").contains(Integer.toString(BoosterManagement.BOOSTER_DOUBLE.getId()))) {
+                        if (ruko.getProperties().getProperty("booster").contains(Integer.toString(BoosterManagement.BOOSTER_DOUBLE.getId()))) {
 
                             int count = (BoosterManagement.BOOSTER_TREBLE.getCost() - BoosterManagement.BOOSTER_DOUBLE.getCost());
 
                             if (ruko.getRukoUser() < count) {
                                 embed.addField(" ", "`❌ Your payment has been successful ( You don't have enough ruko )`", false);
                             } else {
-                                ruko.addProperty("Booster", Integer.toString(BoosterManagement.BOOSTER_TREBLE.getId()));
+                                ruko.addProperty("booster", Integer.toString(BoosterManagement.BOOSTER_TREBLE.getId()));
                                 embed.addField(" ", new MessageUtils("`✅ Your payment has been successful ( Booster x3 )` -" + count + " :ruko:").EmojisHolder(), false);
                                 ruko.removeRukoUser(count);
                             }
-                        } else if (ruko.getProperties().getProperty("Booster").contains(Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()))) {
+                        } else if (ruko.getProperties().getProperty("booster").contains(Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()))) {
                             embed.addField(" ", "`❌ Your payment has been refusal ( You already have highest booster )`", false);
-                        } else if (ruko.getProperties().getProperty("Booster").contains(Integer.toString(BoosterManagement.BOOSTER_TREBLE.getId()))) {
+                        } else if (ruko.getProperties().getProperty("booster").contains(Integer.toString(BoosterManagement.BOOSTER_TREBLE.getId()))) {
                             embed.addField(" ", "`❌ Your payment has been successful ( You already have this booster )`", false);
                         } else {
                             int count = (BoosterManagement.BOOSTER_TREBLE.getCost());
@@ -1467,7 +1474,7 @@ public final class Events extends ListenerAdapter {
                             if (ruko.getRukoUser() < count) {
                                 embed.addField(" ", "`❌ Your payment has been successful ( You don't have enough ruko )`", false);
                             } else {
-                                ruko.addProperty("Booster", Integer.toString(BoosterManagement.BOOSTER_TREBLE.getId()));
+                                ruko.addProperty("booster", Integer.toString(BoosterManagement.BOOSTER_TREBLE.getId()));
                                 embed.addField(" ", new MessageUtils("`✅ Your payment has been successful ( Booster x3 )` -" + count + " :ruko:").EmojisHolder(), false);
                                 ruko.removeRukoUser(count);
                             }
@@ -1478,27 +1485,27 @@ public final class Events extends ListenerAdapter {
                         break;
                     case "\uD83D\uDFE5":
                         embed.clearFields();
-                        if (ruko.getProperties().getProperty("Booster").contains(Integer.toString(BoosterManagement.BOOSTER_DOUBLE.getId()))) {
+                        if (ruko.getProperties().getProperty("booster").contains(Integer.toString(BoosterManagement.BOOSTER_DOUBLE.getId()))) {
                             int count = (BoosterManagement.BOOSTER_QUADRUPLE.getCost() - BoosterManagement.BOOSTER_DOUBLE.getCost());
 
                             if (ruko.getRukoUser() < count) {
                                 embed.addField(" ", "`❌ Your payment has been successful ( You don't have enough ruko )`", false);
                             } else {
-                                ruko.addProperty("Booster", Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()));
+                                ruko.addProperty("booster", Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()));
                                 embed.addField(" ", new MessageUtils("`✅ Your payment has been successful ( Booster x4 )` -" + count + " :ruko:").EmojisHolder(), false);
                                 ruko.removeRukoUser(count);
                             }
-                        } else if (ruko.getProperties().getProperty("Booster").contains(Integer.toString(BoosterManagement.BOOSTER_TREBLE.getId()))) {
+                        } else if (ruko.getProperties().getProperty("booster").contains(Integer.toString(BoosterManagement.BOOSTER_TREBLE.getId()))) {
                             int count = (BoosterManagement.BOOSTER_QUADRUPLE.getCost() - BoosterManagement.BOOSTER_TREBLE.getCost());
 
                             if (ruko.getRukoUser() < count) {
                                 embed.addField(" ", "`❌ Your payment has been successful ( You don't have enough ruko )`", false);
                             } else {
-                                ruko.addProperty("Booster", Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()));
+                                ruko.addProperty("booster", Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()));
                                 embed.addField(" ", new MessageUtils("`✅ Your payment has been successful ( Booster x4 )` -" + count + " :ruko:").EmojisHolder(), false);
                                 ruko.removeRukoUser(count);
                             }
-                        } else if (ruko.getProperties().getProperty("Booster").contains(Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()))) {
+                        } else if (ruko.getProperties().getProperty("booster").contains(Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()))) {
                             embed.addField(" ", "`❌ Your payment has been successful ( You already have this booster )`", false);
                         } else {
                             int count = (BoosterManagement.BOOSTER_QUADRUPLE.getCost());
@@ -1506,7 +1513,7 @@ public final class Events extends ListenerAdapter {
                             if (ruko.getRukoUser() < count) {
                                 embed.addField(" ", "`❌ Your payment has been successful ( You don't have enough ruko )`", false);
                             } else {
-                                ruko.addProperty("Booster", Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()));
+                                ruko.addProperty("booster", Integer.toString(BoosterManagement.BOOSTER_QUADRUPLE.getId()));
                                 embed.addField(" ", new MessageUtils("`✅ Your payment has been successful ( Booster x4 )` -" + count + " :ruko:").EmojisHolder(), false);
                                 ruko.removeRukoUser(count);
                             }

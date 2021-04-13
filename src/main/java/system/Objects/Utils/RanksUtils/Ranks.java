@@ -1,4 +1,4 @@
-package system.Objects.Utils.RanksUtils;
+package system.Objects.Utils.ranksutils;
 
 import org.jetbrains.annotations.Contract;
 

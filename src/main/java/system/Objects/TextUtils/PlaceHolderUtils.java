@@ -15,8 +15,8 @@ public enum PlaceHolderUtils {
     ERROR("<:error:752041143415341077>", "error", 7, ":error:"),
     ENABLED("<:enable_ryuko_system:752039346139431012>  ", "enable_ryuko_system", 8, ":enable:"),
     DISABLED("<:disable_ryuko_system:752039346080579635>", "disable_ryuko_system", 9, ":disable:"),
-    DISCORD("<:discord_ryuko_system:744991581127311420>", "discord_ryuko_system", 10, ":discord:");
-
+    ACHIEVEMENT("<:achievement:823238902851698698>", "achievement", 10, ":achievement:"),
+    DISCORD("<:discord_ryuko_system:744991581127311420>", "discord_ryuko_system", 11, ":discord:");
     private final String emoji;
     private final String name;
     private final int id;
@@ -31,6 +31,7 @@ public enum PlaceHolderUtils {
 
     public String getValue() {
         switch (this) {
+            case ACHIEVEMENT: return ACHIEVEMENT.emoji;
             case RUKO: return RUKO.emoji;
             case ERROR: return ERROR.emoji;
             case ONLINE: return ONLINE.emoji;
@@ -47,14 +48,25 @@ public enum PlaceHolderUtils {
     }
 
     public static String replaceEmojis(String string) {
-        final AtomicReference<String> replacement = new AtomicReference<>(string);
-        Arrays.stream(PlaceHolderUtils.values()).forEach(value -> {
-            final String replacementString = replacement.get();
-            assert value.getValue() != null;
+        try {
+            final AtomicReference<String> replacement = new AtomicReference<>(string);
+            Arrays.stream(PlaceHolderUtils.values()).forEach(value -> {
+                final String replacementString = replacement.get();
+                assert value.getValue() != null;
 
-            replacement.set(replacementString.replaceAll(value.code, value.getValue()));
-        });
-        return replacement.get();
+                replacement.set(replacementString.replaceAll(value.code, value.getValue()));
+            });
+            return replacement.get();
+        } catch (Exception e) {
+            final AtomicReference<String> replacement = new AtomicReference<>(string);
+            Arrays.stream(PlaceHolderUtils.values()).forEach(value -> {
+                final String replacementString = replacement.get();
+                assert value.getValue() != null;
+
+                replacement.set(replacementString.replaceAll(value.code, "`None Emoji`"));
+            });
+            return replacement.get();
+        }
     }
 
     public String getEmoji() {

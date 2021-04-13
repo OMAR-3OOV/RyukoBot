@@ -5,14 +5,10 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import system.Objects.Utils.Administration.BannedUtils.BannedUtils;
+import system.Objects.Utils.administration.BannedUtils.BannedUtils;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.*;
 

@@ -8,14 +8,13 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemove
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import system.Commands.Administration.Suggest.SuggestCommand;
+import system.commands.Administration.Suggest.SuggestCommand;
 import system.Objects.TextUtils.MessageUtils;
-import system.Objects.Utils.SuggestManagement.SuggestFunction;
-import system.Objects.Utils.SuggestManagement.SuggestQuestions;
+import system.Objects.Utils.suggestmanagement.SuggestFunction;
+import system.Objects.Utils.suggestmanagement.SuggestQuestions;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

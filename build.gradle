@@ -14,8 +14,9 @@ repositories {
     jcenter()
 
     maven {
-        url 'https://jutpack.io'
-        }
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
 
     maven {
         url "https://dl.bintray.com/kodehawa/maven"
@@ -30,7 +31,7 @@ allprojects {
 
 dependencies {
     // Discord - JDA
-    implementation 'net.dv8tion:JDA:4.2.0_241'
+    implementation 'net.dv8tion:JDA:4.2.1_256'
     implementation group:'com.jagrosh' , name: 'jda-utilities', version: '3.0.5'
     // Some JDA additions
     implementation group: 'me.duncte123', name: 'botCommons', version: 'BETA_2.0.110'
@@ -49,6 +50,8 @@ dependencies {
     implementation 'com.github.marlonlom:timeago:4.0.3'
     // nsfw
     implementation 'net.kodehawa:imageboard-api:2.4.5'
+    // MathUtils
+    implementation group: 'fr.inrae.toulouse.metexplore', name: 'met4j-mathUtils', version: '0.2.10'
 }
 
 compileJava.options.encoding = 'UTF-8'

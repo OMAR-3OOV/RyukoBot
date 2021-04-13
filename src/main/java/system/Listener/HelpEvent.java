@@ -8,10 +8,11 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import system.Commands.Administration.helpCommand;
+import system.commands.Administration.helpCommand;
+import system.commands.informationCategory.AchievementsCommand;
 import system.Objects.Category;
-import system.Objects.Utils.Administration.HelpPagesUtil;
-import system.Objects.Utils.Administration.HelpUtil;
+import system.Objects.Utils.administration.HelpPagesUtil;
+import system.Objects.Utils.administration.HelpUtil;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -39,6 +40,18 @@ public class HelpEvent extends ListenerAdapter {
                                     helperMessage.remove(key);
                                     page.remove(key);
                                     helpCooldown.remove(key);
+                                }
+                            });
+                        } catch (Exception ignored) {
+
+                        }
+                    } else if (AchievementsCommand.achievementPages.containsKey(user)) {
+                        try {
+                            AchievementsCommand.pageCooldown.forEach((key, value) -> {
+                                if (value >= 60) {
+                                    AchievementsCommand.achievementPages.remove(user);
+                                    AchievementsCommand.pagesMessage.remove(user);
+                                    AchievementsCommand.pageCooldown.remove(user);
                                 }
                             });
                         } catch (Exception ignored) {
