@@ -6,9 +6,9 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import system.Listener.AIEvents;
-import system.Objects.Category;
-import system.Objects.Command;
+import system.listener.AIEvents;
+import system.objects.Category;
+import system.objects.Command;
 
 import java.io.FileNotFoundException;
 import java.time.format.DateTimeFormatter;

@@ -6,12 +6,12 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import system.Listener.*;
-import system.Objects.Utils.achievementsutils.Achievements;
-import system.Objects.Utils.achievementsutils.AchievementsManager;
-import system.Objects.Utils.administration.BannedUtils.BannedUtils;
-import system.Objects.Utils.profileconfigutils.ProfileBuilder;
-import system.Objects.Utils.suggestmanagement.SuggestManager;
+import system.listener.*;
+import system.objects.Utils.achievementsutils.Achievements;
+import system.objects.Utils.achievementsutils.AchievementsManager;
+import system.objects.Utils.administration.BannedUtils.BannedUtils;
+import system.objects.Utils.profileconfigutils.ProfileBuilder;
+import system.objects.Utils.suggestmanagement.SuggestManager;
 
 import javax.security.auth.login.LoginException;
 import java.util.EnumSet;

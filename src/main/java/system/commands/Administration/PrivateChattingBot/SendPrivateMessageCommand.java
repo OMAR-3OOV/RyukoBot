@@ -4,11 +4,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.TextUtils.MessageUtils;
-import system.Objects.Utils.privatechatutils.PrivateChat;
-import system.Objects.Utils.privatechatutils.PrivateChatMode;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.TextUtils.MessageUtils;
+import system.objects.Utils.privatechatutils.PrivateChat;
+import system.objects.Utils.privatechatutils.PrivateChatMode;
 
 import java.awt.*;
 import java.io.File;

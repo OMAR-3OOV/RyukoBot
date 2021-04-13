@@ -5,12 +5,12 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import system.Objects.Utils.achievementsutils.AchievementsManager;
-import system.Objects.Utils.canvasutils.DrawProfileCanvas;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.Utils.profileconfigutils.ProfileBuilder;
-import system.Objects.Utils.levelUtils.LevelsCalculations;
+import system.objects.Utils.achievementsutils.AchievementsManager;
+import system.objects.Utils.canvasutils.DrawProfileCanvas;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.Utils.profileconfigutils.ProfileBuilder;
+import system.objects.Utils.levelUtils.LevelsCalculations;
 
 import javax.imageio.ImageIO;
 import java.io.File;

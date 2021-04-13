@@ -25,12 +25,12 @@ import system.commands.minecraftCategory.*;
 import system.commands.informationCategory.readCommand;
 import system.commands.Administration.bannedCommand;
 import system.commands.testcommand;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.TextUtils.MessageUtils;
-import system.Objects.Utils.administration.BannedUtils.BannedElapsedTimes;
-import system.Objects.Utils.administration.BannedUtils.BannedUtils;
-import system.Objects.Utils.profileconfigutils.ProfileBuilder;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.TextUtils.MessageUtils;
+import system.objects.Utils.administration.BannedUtils.BannedElapsedTimes;
+import system.objects.Utils.administration.BannedUtils.BannedUtils;
+import system.objects.Utils.profileconfigutils.ProfileBuilder;
 
 import java.io.FileNotFoundException;
 import java.util.*;

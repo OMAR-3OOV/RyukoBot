@@ -7,12 +7,12 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.TextUtils.MessageUtils;
-import system.Objects.Utils.achievementsutils.AchievementsManager;
-import system.Objects.Utils.profileconfigutils.ProfileBuilder;
-import system.Objects.Utils.coinsManager;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.TextUtils.MessageUtils;
+import system.objects.Utils.achievementsutils.AchievementsManager;
+import system.objects.Utils.profileconfigutils.ProfileBuilder;
+import system.objects.Utils.coinsManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

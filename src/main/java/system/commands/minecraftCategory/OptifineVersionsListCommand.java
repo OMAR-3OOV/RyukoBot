@@ -7,9 +7,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.TextUtils.MessageUtils;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.TextUtils.MessageUtils;
 
 import java.awt.*;
 import java.io.FileNotFoundException;

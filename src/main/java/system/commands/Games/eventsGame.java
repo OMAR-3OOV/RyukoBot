@@ -7,10 +7,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import system.commands.Games.eventsGames.numbersGame;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.TextUtils.MessageUtils;
-import system.Objects.Utils.LastWinnersEvent;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.TextUtils.MessageUtils;
+import system.objects.Utils.LastWinnersEvent;
 
 import java.awt.*;
 import java.io.*;

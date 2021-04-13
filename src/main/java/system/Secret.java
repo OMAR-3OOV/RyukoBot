@@ -1,6 +1,6 @@
 package system;
 
-import system.Objects.Config;
+import system.objects.Config;
 
 final class Secret {
     static final String TOKEN = Config.get("TOKEN");

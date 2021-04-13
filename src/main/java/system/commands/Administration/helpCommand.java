@@ -6,11 +6,11 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import system.CommandManager;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.Config;
-import system.Objects.Utils.administration.HelpPagesUtil;
-import system.Objects.Utils.administration.HelpUtil;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.Config;
+import system.objects.Utils.administration.HelpPagesUtil;
+import system.objects.Utils.administration.HelpUtil;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;

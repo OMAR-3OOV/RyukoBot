@@ -1,9 +1,6 @@
 package system;
 
-import system.Listener.Events;
-import system.Objects.Config;
-
-import java.util.stream.Collectors;
+import system.objects.Config;
 
 public class Constants {
 

@@ -5,11 +5,11 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.TextUtils.MessageUtils;
-import system.Objects.Utils.boosterutils.Booster;
-import system.Objects.Utils.coinsManager;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.TextUtils.MessageUtils;
+import system.objects.Utils.boosterutils.Booster;
+import system.objects.Utils.coinsManager;
 
 import java.awt.*;
 import java.io.FileNotFoundException;

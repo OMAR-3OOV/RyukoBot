@@ -6,11 +6,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.Config;
-import system.Objects.TextUtils.MessageUtils;
-import system.Objects.Utils.BarUtil;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.Config;
+import system.objects.TextUtils.MessageUtils;
+import system.objects.Utils.BarUtil;
 
 import java.awt.*;
 import java.io.FileNotFoundException;

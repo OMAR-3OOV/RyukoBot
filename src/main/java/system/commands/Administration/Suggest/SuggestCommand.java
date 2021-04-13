@@ -6,10 +6,10 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.Utils.suggestmanagement.SuggestQuestions;
-import system.Objects.Utils.suggestmanagement.SuggestFunction;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.Utils.suggestmanagement.SuggestQuestions;
+import system.objects.Utils.suggestmanagement.SuggestFunction;
 
 import java.awt.*;
 import java.io.FileNotFoundException;

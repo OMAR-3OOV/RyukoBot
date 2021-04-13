@@ -3,12 +3,12 @@ package system.commands.NsfwCategory;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import system.Objects.Category;
-import system.Objects.Command;
-import system.Objects.TextUtils.MessageUtils;
-import system.Objects.Utils.nfswutils.Nekos.NekosTags;
-import system.Objects.Utils.nfswutils.Nekos.NekosUtil;
-import system.Objects.Utils.chatbot.Emotions;
+import system.objects.Category;
+import system.objects.Command;
+import system.objects.TextUtils.MessageUtils;
+import system.objects.Utils.nfswutils.Nekos.NekosTags;
+import system.objects.Utils.nfswutils.Nekos.NekosUtil;
+import system.objects.Utils.chatbot.Emotions;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

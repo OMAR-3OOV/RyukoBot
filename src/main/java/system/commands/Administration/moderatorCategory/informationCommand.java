@@ -5,8 +5,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import system.Objects.Category;
-import system.Objects.Command;
+import system.objects.Category;
+import system.objects.Command;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;

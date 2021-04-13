@@ -2,8 +2,8 @@ package system.commands.informationCategory;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import system.Objects.Category;
-import system.Objects.Command;
+import system.objects.Category;
+import system.objects.Command;
 
 import java.io.FileNotFoundException;
 import java.util.List;
