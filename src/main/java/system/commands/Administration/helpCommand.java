@@ -1,4 +1,4 @@
-package system.Commands.Administration;
+package system.commands.Administration;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -9,8 +9,8 @@ import system.CommandManager;
 import system.Objects.Category;
 import system.Objects.Command;
 import system.Objects.Config;
-import system.Objects.Utils.Administration.HelpPagesUtil;
-import system.Objects.Utils.Administration.HelpUtil;
+import system.Objects.Utils.administration.HelpPagesUtil;
+import system.Objects.Utils.administration.HelpUtil;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
@@ -64,10 +64,12 @@ public class helpCommand implements Command {
         }
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setColor(Color.orange)
+                .setColor(new Color(254, 95, 95))
                 .setTitle("Help commands")
                 .setFooter("Usage : r!help <command>")
                 .setThumbnail("https://i.postimg.cc/G2MN02p0/help.png");
+        embed.setImage("https://imgur.com/UUE6taC.png");
+
         StringBuilder string = embed.getDescriptionBuilder();
 
         List<Command> cmds = new ArrayList<>();
@@ -117,7 +119,6 @@ public class helpCommand implements Command {
         helpPage.put(event.getAuthor(), page);
         helper.put(event.getAuthor(), helpUtil);
         helperMessage.put(event.getAuthor(), msg);
-
         helpCooldown.put(event.getAuthor(), 0);
 
         event.getMessage().delete().queue();
