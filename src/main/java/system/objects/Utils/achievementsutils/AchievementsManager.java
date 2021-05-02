@@ -1,12 +1,18 @@
 package system.objects.Utils.achievementsutils;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import system.objects.TextUtils.MessageUtils;
+import system.objects.Utils.LanguagesUtils.LanguagesManager;
+import system.objects.Utils.LanguagesUtils.MessagesKeys;
 
+import java.awt.*;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -25,6 +31,7 @@ public class AchievementsManager {
     public AchievementsManager(String achievement) {
         this.file = new File("System/Achievements/keys/" + achievement + ".properties");
         this.usersFile = new File("System/Profiles/AchievementUsers");
+        this.settingsFile = new File("System/Achievements/Guilds/settings.properties");
 
         this.properties = new Properties();
         this.settingsProperties = new Properties();
@@ -38,7 +45,6 @@ public class AchievementsManager {
 
         this.properties = new Properties();
         buildUsers();
-        buildSettings();
     }
 
     public User getUser() {
@@ -94,42 +100,49 @@ public class AchievementsManager {
     public boolean isCollected(Achievements achievement) {
         AtomicBoolean bool = new AtomicBoolean(false);
 
-        Arrays.stream(Objects.requireNonNull(this.usersFile.getParentFile().listFiles())).forEach(files -> {
-            try {
-                properties.load(new FileInputStream(files));
+//        Arrays.stream(getUsersFile().listFiles()).forEach(files -> {
+//            try {
+//                properties.load(new FileInputStream(files));
+//
+//                bool.set(Boolean.parseBoolean(properties.getProperty(achievement.getAchievementKey())));
+//            } catch (IOException e) {
+//            }
+//        });
 
+        if (getUsersFile().exists()) {
+            try {
+                properties.load(new FileInputStream(getUsersFile()));
                 bool.set(Boolean.parseBoolean(properties.getProperty(achievement.getAchievementKey())));
             } catch (IOException e) {
+
             }
-        });
+        } else {
+            throw new IllegalArgumentException(this.user.getId() + " is doesn't longer in files");
+        }
 
         return bool.get();
     }
 
     @Contract(pure = true)
-    public void CollectAchievement(Achievements achievements, boolean bool) {
-        if (!bool) {
-            throw new IllegalArgumentException(achievements.getAchievementKey() + " it can't set as false in properties!");
-        }
-
+    public void giveAchievements(Achievements... achievements) {
         try {
             properties.load(new FileInputStream(getUsersFile()));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (Boolean.parseBoolean(properties.getProperty(achievements.getAchievementKey()))) return;
-        else {
-            properties.setProperty(achievements.getAchievementKey(), Boolean.toString(bool));
-            save();
-        }
+        Arrays.stream(achievements).forEach(achievement -> {
+            if (Boolean.parseBoolean(properties.getProperty(achievement.getAchievementKey()))) return;
+
+            else {
+                properties.setProperty(achievement.getAchievementKey(), Boolean.toString(true));
+                save(getUsersFile());
+            }
+        });
     }
 
     @Contract(pure = true)
-    public void CollectAchievement(User user, Achievements achievements, boolean bool) {
-        if (!bool) {
-            throw new IllegalArgumentException(achievements.getAchievementKey() + " it can't set as false in properties!");
-        }
+    public void giveAchievements(User user, Achievements... achievements) {
 
         Arrays.stream(Objects.requireNonNull(this.getUsersFile().getParentFile().listFiles())).forEach(file -> {
             if (file.getName().equals(user.getId())) {
@@ -141,11 +154,37 @@ public class AchievementsManager {
             }
         });
 
-        if (!Boolean.parseBoolean(properties.getProperty(achievements.getAchievementKey()))) {
-            user.openPrivateChannel().queue();
-            properties.setProperty(achievements.getAchievementKey(), Boolean.toString(bool));
-            save();
-        }
+        Arrays.stream(achievements).forEach(achievement -> {
+
+            if (!Boolean.parseBoolean(properties.getProperty(achievement.getAchievementKey()))) {
+                user.openPrivateChannel().queue();
+                properties.setProperty(achievement.getAchievementKey(), Boolean.toString(true));
+                save(getUsersFile());
+            }
+        });
+
+    }
+
+    public void sendCollectedMessage(User user, Achievements... achievements) {
+        EmbedBuilder embed = new EmbedBuilder();
+        StringBuilder builder = new StringBuilder();
+        LanguagesManager languagesManager = new LanguagesManager(this.user);
+
+        Arrays.stream(achievements).forEach(achievement -> {
+            builder.append("\n- ").append(languagesManager.getAchievementName(achievement)).append(" | ").append(" Type : ").append(achievement.getType().getName()).append("\n");
+        });
+
+        embed.setColor(new Color(175, 141, 252));
+        embed.setTitle(languagesManager.getMessage(MessagesKeys.ACHIEVEMENT_COLLECTED_TITLE_MESSAGE));
+        embed.setDescription(languagesManager.getMessage(MessagesKeys.ACHIEVEMENT_COLLECTED_DESCRIPTION_MESSAGE).replace("<achievements>", builder.toString()));
+        embed.setFooter(languagesManager.getMessage(MessagesKeys.ACHIEVEMENT_COLLECTED_FOOTER_MESSAGE) + " " + new SimpleDateFormat("EEEE, dd MMM yyyy").format(new Date()));
+
+        user.openPrivateChannel().queue(privatemsg -> {
+            privatemsg.sendMessage(embed.build()).queue(message -> {
+
+            }, error -> {
+            });
+        });
     }
 
     public File getFile() {

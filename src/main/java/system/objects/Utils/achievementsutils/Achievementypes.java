@@ -3,8 +3,8 @@ package system.objects.Utils.achievementsutils;
 public enum Achievementypes {
 
 
-    SECRETY(0, "secrety", "Secrety", "Secret is so rare achievement that users can achieved!"),
-    GLOBAL(1, "global", "Global", "Everyone can collected global achievements");
+    SECRETY(0, "secret", "achievement-type-secret-name", "achievement-type-secret-description"),
+    GLOBAL(1, "global", "achievement-type-global-name", "achievement-type-global-description");
 
     private final int id;
     private final String key;

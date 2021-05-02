@@ -1,15 +1,20 @@
 package system.objects.Utils.profileconfigutils;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.Contract;
+import system.objects.Utils.LanguagesUtils.Languages;
+import system.objects.Utils.guildconfigutils.GuildsBuilder;
 import system.objects.Utils.levelUtils.LevelsCalculations;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProfileBuilder implements LevelsCalculations {
 
     private User user;
+    private GuildsBuilder guildsBuilder;
 
     // Files
     private final File settingsFolder = new File("system/Profiles/Settings.properties");
@@ -24,6 +29,16 @@ public class ProfileBuilder implements LevelsCalculations {
      *
      * @param user to get user information
      */
+    public ProfileBuilder(User user, Guild guild) {
+        this.user = user;
+        this.guildsBuilder = new GuildsBuilder(guild);
+
+        this.profilefolder = new File("system/Profiles/Users/" + user.getId() + ".properties");
+
+        buildProfile(this.profilefolder, this.profileProperties);
+        buildSettings(this.settingsFolder, this.settingsProperties);
+    }
+
     public ProfileBuilder(User user) {
         this.user = user;
 
@@ -37,6 +52,7 @@ public class ProfileBuilder implements LevelsCalculations {
      * get settings information
      */
     public ProfileBuilder() {
+        this.profilefolder = new File("system/Profiles/Users");
         buildSettings(this.settingsFolder, this.settingsProperties);
     }
 
@@ -61,18 +77,18 @@ public class ProfileBuilder implements LevelsCalculations {
 
     @Contract(pure = true)
     public double getUsers() {
-//        AtomicInteger count = new AtomicInteger(0);
-//        Arrays.stream(Objects.requireNonNull(getProfilefolder().getParentFile().listFiles())).forEach(files -> {
-//            try {
-//                profileProperties.load(new FileInputStream(files));
-//
-//                if (Boolean.parseBoolean(profileProperties.getProperty("verify"))) {
-//                    count.addAndGet(1);
-//                }
-//            } catch (IOException e) {
-//
-//            }
-//        });
+        AtomicInteger count = new AtomicInteger(0);
+        Arrays.stream(Objects.requireNonNull(getProfilefolder().getParentFile().listFiles())).forEach(files -> {
+            try {
+                profileProperties.load(new FileInputStream(files));
+
+                if (Boolean.parseBoolean(profileProperties.getProperty("verify"))) {
+                    count.addAndGet(1);
+                }
+            } catch (IOException e) {
+
+            }
+        });
 
         return Objects.requireNonNull(this.profilefolder.getParentFile().listFiles()).length;
     }
@@ -138,7 +154,11 @@ public class ProfileBuilder implements LevelsCalculations {
                 p.put("canvas-filter", String.valueOf(0));
                 p.put("username", user.getName());
                 p.put("user-id", user.getId());
-                p.put("language", "english");
+                if (this.guildsBuilder != null) {
+                    p.put("language", String.valueOf(this.guildsBuilder.getLanguage().getId()));
+                } else {
+                    p.put("language", "0");
+                }
                 p.put("ruko", String.valueOf(0));
                 p.put("gains", String.valueOf(0));
                 p.put("exp", String.valueOf(0));
@@ -216,8 +236,8 @@ public class ProfileBuilder implements LevelsCalculations {
         return getProfileProperties().getProperty("user-id");
     }
 
-    public String getLanguage() {
-        return getProfileProperties().getProperty("language");
+    public Languages getLanguage() {
+        return Languages.getLanguage(Integer.parseInt(getProfileProperties().getProperty("language")));
     }
 
     public int getRuko() {

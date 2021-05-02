@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.update.GuildUpdateDescriptionEvent;
+import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
@@ -30,19 +32,20 @@ import system.commands.Games.eventsGame;
 import system.commands.Games.eventsGames.numbersGame;
 import system.commands.Games.rpcGame;
 import system.commands.informationCategory.profileCommand;
+import system.commands.minecraftCategory.HypixelCommand;
 import system.commands.minecraftCategory.skywarsCommand;
 import system.Constants;
 import system.objects.Config;
 import system.objects.TextUtils.MessageUtils;
-import system.objects.Utils.ActivityManagar;
+import system.objects.Utils.*;
+import system.objects.Utils.LanguagesUtils.LanguagesManager;
+import system.objects.Utils.LanguagesUtils.MessagesKeys;
 import system.objects.Utils.boosterutils.Booster;
 import system.objects.Utils.boosterutils.BoosterManagement;
-import system.objects.Utils.LastWinnersEvent;
+import system.objects.Utils.guildconfigutils.GuildsBuilder;
 import system.objects.Utils.privatechatutils.PrivateChat;
 import system.objects.Utils.privatechatutils.PrivateChatMode;
 import system.objects.Utils.profileconfigutils.ProfileBuilder;
-import system.objects.Utils.RandomStringAPI;
-import system.objects.Utils.coinsManager;
 import system.objects.Utils.levelUtils.LevelsManager;
 import system.objects.Versions;
 
@@ -119,6 +122,12 @@ public final class Events extends ListenerAdapter {
 
                         }
                     }
+
+                    event.getJDA().getGuilds().forEach(guild -> {
+                        GuildsBuilder guildsBuilder = new GuildsBuilder(guild);
+
+                        guildsBuilder.buildGuild();
+                    });
                 });
             }
         }, (1000), 1000);
@@ -144,56 +153,9 @@ public final class Events extends ListenerAdapter {
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
 
-        coinsManager ruko = new coinsManager(event.getGuild());
+        GuildsBuilder guildsBuilder = new GuildsBuilder(event.getGuild());
 
-        // Guild file
-        {
-            if (event.getGuild().isLoaded()) {
-                if (!ruko.getGuildFiles().exists()) {
-                    ruko.createGuildFile();
-                }
-            }
-
-            File order = new File("system/Guilds/");
-            File file = new File("system/Guilds/" + event.getGuild().getId() + ".properties");
-
-            if (!order.exists()) {
-                file.getParentFile().mkdirs();
-            }
-            FileReader reader = null;
-            try {
-                reader = new FileReader(file);
-            } catch (FileNotFoundException e) {
-            }
-
-            Properties p = new Properties();
-            if (file.exists()) {
-                try {
-                    p.load(reader);
-                } catch (IOException e) {
-
-                }
-            }
-
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-
-                    p.setProperty("Name", event.getGuild().getName());
-                    p.setProperty("Id", event.getGuild().getId());
-                    p.setProperty("OwnerShipId", event.getGuild().getOwnerId());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    p.save(new FileOutputStream("system/Guilds/" + event.getGuild().getId() + ".properties"), null);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        guildsBuilder.buildGuild();
 
         event.getJDA().getPresence().setActivity(Activity.playing("r!help || " + event.getJDA().getGuilds().stream().count() + " Servers || Version " + Arrays.stream(Versions.VERSIONS).findFirst().get()));
         LOGGER.info("I entered in " + event.getGuild().getName() + " Guild, ID : " + event.getGuild().getId() + " | The guilds count now is " + event.getJDA().getGuilds().stream().count());
@@ -202,14 +164,26 @@ public final class Events extends ListenerAdapter {
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
 
-        File file = new File("system/Guilds/" + event.getGuild().getId() + ".properties");
+        GuildsBuilder guildsBuilder = new GuildsBuilder(event.getGuild());
 
-        if (file.exists()) {
-            file.delete();
-        }
+        guildsBuilder.deleteGuild();
 
         event.getJDA().getPresence().setActivity(Activity.playing("r!help || " + event.getJDA().getGuilds().stream().count() + " Servers || Version " + Arrays.stream(Versions.VERSIONS).findFirst().get()));
         LOGGER.info("I left from " + event.getGuild().getName() + " Guild, ID : " + event.getGuild().getId() + " | The guilds count now is " + event.getJDA().getGuilds().stream().count());
+    }
+
+    @Override
+    public void onGuildUpdateName(@NotNull GuildUpdateNameEvent event) {
+        GuildsBuilder guildsBuilder = new GuildsBuilder(event.getGuild());
+
+        guildsBuilder.setName(event.getNewName());
+    }
+
+    @Override
+    public void onGuildUpdateDescription(@NotNull GuildUpdateDescriptionEvent event) {
+        GuildsBuilder guildsBuilder = new GuildsBuilder(event.getGuild());
+
+        guildsBuilder.setDescription(event.getNewDescription());
     }
 
     @Override
@@ -220,30 +194,42 @@ public final class Events extends ListenerAdapter {
     @Override
     public void onPrivateMessageReceived(@NotNull PrivateMessageReceivedEvent event) {
 
+        VerifyUtil verify = verifyCommand.verify.get(event.getAuthor());
+
         if (event.getAuthor().isBot()) return;
         if (event.getAuthor().isFake()) return;
 
-        if (verifyCommand.verifyCheck.containsKey(event.getAuthor())) {
-            if (event.getMessage().getContentRaw().equals(verifyCommand.verifyCheck.get(event.getAuthor()))) {
-                final ProfileBuilder profile = new ProfileBuilder(event.getAuthor());
+        if (verify.getVerify().containsKey(event.getAuthor())) {
 
-                event.getAuthor().openPrivateChannel().queue((msg) -> msg.sendMessage("Your verify has been accepted ✅").queue());
+            final LanguagesManager languagesManager = new LanguagesManager(event.getAuthor());
+            EmbedBuilder embed = new EmbedBuilder();
 
-                verifyCommand.verifyCompleted.get(event.getAuthor()).cancel();
+            if (verify.getVerify().get(event.getAuthor()).equals(event.getMessage().getContentRaw())) {
+                File file = new File("Image/reactions/successfully.gif");
 
-                verifyCommand.verifyCompleted.remove(event.getAuthor());
-                verifyCommand.verifyChecking.remove(event.getAuthor());
-                verifyCommand.verifyCheck.remove(event.getAuthor());
+                embed.setColor(new Color(210, 255, 204));
+                embed.setImage("attachment://successfully.gif");
+                embed.setDescription(languagesManager.getMessage(MessagesKeys.VERIFY_SUCCESSFULLY_CODE));
 
-                profile.setVerify(true);
+                event.getAuthor().openPrivateChannel().queue((msg) -> msg.sendMessage(embed.build()).addFile(file).queue());
+
+                verify.setVerify(true);
+
+                verify.getMessage().editMessage(languagesManager.getMessage(MessagesKeys.VERIFY_SUCCESSFULLY_CODE) + " " + event.getAuthor().getAsMention()).queue();
+
+                verify.close();
             } else {
-                event.getAuthor().openPrivateChannel().queue((msg) -> msg.sendMessage("Your verify has been denied ❌").queue());
+                File file = new File("Image/reactions/unfortunately.gif");
 
-                verifyCommand.verifyCompleted.get(event.getAuthor()).cancel();
+                embed.setColor(new Color(255, 119, 119));
+                embed.setImage("attachment://unfortunately.gif");
+                embed.setDescription(languagesManager.getMessage(MessagesKeys.VERIFY_WRONG_CODE));
 
-                verifyCommand.verifyCompleted.remove(event.getAuthor());
-                verifyCommand.verifyChecking.remove(event.getAuthor());
-                verifyCommand.verifyCheck.remove(event.getAuthor());
+                event.getAuthor().openPrivateChannel().queue((msg) -> {
+                    msg.sendMessage(embed.build()).addFile(file).queue();
+                });
+
+                verify.close();
             }
         }
 
@@ -292,7 +278,6 @@ public final class Events extends ListenerAdapter {
 
                 switch(event.getReactionEmote().getName()) {
                     case "✅":
-
                         embed.setColor(new Color(211, 211, 211));
                         embed.setDescription(new MessageUtils(":successful: all messages has been saved!").EmojisHolder());
                         SendPrivateMessageCommand.fileFunction.remove(event.getUser());
@@ -323,8 +308,7 @@ public final class Events extends ListenerAdapter {
         if (event.getAuthor().isFake()) return;
 
         ActivityManagar activityManagar = new ActivityManagar(event.getGuild(), event.getAuthor());
-        ProfileBuilder profile = new ProfileBuilder(event.getAuthor());
-        LevelsManager levelsManager = new LevelsManager(event.getAuthor());
+        ProfileBuilder profile = new ProfileBuilder(event.getAuthor(), event.getGuild());
 
         numbersGame numbersGame = eventsGame.game;
         prefix = Constants.PREFIX;
@@ -1188,43 +1172,47 @@ public final class Events extends ListenerAdapter {
                 if (profileCommand.verify.get(event.getUser()) == event.getChannel()) {
                     switch (event.getReactionEmote().getName()) {
                         case "✅":
+                            final LanguagesManager languagesManager = new LanguagesManager(event.getUser());
+                            final VerifyUtil verifyUtil = new VerifyUtil(event.getUser(), event.getChannel(), null);
+
                             if (profile.getVerify()) {
-                                event.getChannel().sendMessage(new MessageUtils(":error: | **Your account is already verified**").EmojisHolder()).queue();
+                                event.getChannel().sendMessage(languagesManager.getMessage(MessagesKeys.VERIFY_VERIFIED, event.getUser(), null)).queue();
                                 return;
                             }
 
-                            RandomStringAPI rna = new RandomStringAPI(event.getUser(), 20);
-
-                            Timer timer = new Timer();
-
-                            timer.scheduleAtFixedRate(new TimerTask() {
+                            verifyUtil.getTimer().scheduleAtFixedRate(new TimerTask() {
                                 @Override
                                 public void run() {
-                                    if (rna.getMap().containsKey(event.getUser())) {
-                                        rna.getMap().remove(event.getUser());
+                                    if (verifyUtil.getRsu().getMap().containsKey(event.getUser())) {
+                                        verifyUtil.getRsu().getMap().remove(event.getUser());
 
                                         event.getUser().openPrivateChannel().queue((privateChannel -> {
-                                            privateChannel.sendMessage("**Verify Code has been disappeared \uD83D\uDE3F**").queue();
+                                            privateChannel.sendMessage(languagesManager.getMessage(MessagesKeys.VERIFY_DISAPPEAR, event.getUser(), null)).queue();
                                         }));
                                     }
                                 }
                             }, (1000 * 60), (1000 * 60));
 
-                            verifyCommand.verifyCompleted.put(event.getUser(), timer);
-
                             event.getUser().openPrivateChannel().queue((privateChannel -> {
                                 EmbedBuilder embed = new EmbedBuilder();
-                                embed.setTitle("Verify your discord account in bot data");
+                                embed.setTitle(languagesManager.getMessage(MessagesKeys.VERIFY_PRIVATE_MESSAGE));
                                 embed.setColor(Color.RED);
-                                embed.addField(" ", "**Code :** " + rna.getKey(), false);
+                                embed.addField(" ", "**Code :** " + verifyUtil.getRsu().getKey(), false);
 
-                                privateChannel.sendMessage(embed.build()).queue();
-                                verifyCommand.verifyCheck.put(event.getUser(), rna.getKey());
+                                privateChannel.sendMessage(embed.build()).queue(msg -> {
+                                    msg.addReaction("✅").queue();
+                                }, (error) -> {
+                                    event.getChannel().sendMessage(languagesManager.getMessage(MessagesKeys.VERIFY_CANNOT_SENDMESSAGE, event.getUser(), null)).complete().addReaction("❌").queue();
+                                });
                             }));
 
-                            event.getChannel().sendMessage("Check your private chat, you have 60 seconds only to enter the code, if you didn't enter it the code will disappear").delay(60, TimeUnit.SECONDS).queue();
+                            Message message = event.getChannel().sendMessage(languagesManager.getMessage(MessagesKeys.VERIFY_MESSAGE, event.getUser(), null)).complete();
+                            verifyUtil.setMessage(message);
+
+                            verifyCommand.verify.put(event.getUser(), verifyUtil);
                             break;
                         default:
+                            event.getReaction().removeReaction(event.getUser()).queue();
                             break;
                     }
                 }
@@ -1399,6 +1387,20 @@ public final class Events extends ListenerAdapter {
 
                 if (action.get(event.getUser()) != null || embed.isEmpty()) {
                     action.get(event.getUser()).editMessage(embed.build()).queue();
+                }
+            }
+        }
+
+        if (HypixelCommand.hypixelPlayerLog != null) {
+            if (HypixelCommand.hypixelPlayerLog.containsKey(event.getUser())) {
+                if (HypixelCommand.hypixelPlayerLog.get(event.getUser()).getId().contains(event.getMessageId())) {
+                    switch (event.getReactionEmote().getName()) {
+                        case "\uD83E\uDEB5":
+
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }

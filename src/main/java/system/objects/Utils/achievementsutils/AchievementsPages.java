@@ -22,7 +22,7 @@ public class AchievementsPages {
 
         this.user = user;
         this.input_1 = 0;
-        this.input_2 = 6;
+        this.input_2 = 4;
 
         getAchievementsManager().AchievementsMap().forEach((achievement, bool) -> {
             achievementsPages.put(currentPage.get(), achievement);
@@ -49,7 +49,7 @@ public class AchievementsPages {
     public void forward() {
         if (input_2 >= getAchievementsPages().size()) {
             input_1 = 0;
-            input_2 = 6;
+            input_2 = 4;
 
             return;
         }
@@ -60,7 +60,7 @@ public class AchievementsPages {
 
     public void backward() {
         if (input_1 <= 0) {
-            input_1 =  getAchievementsPages().size()-6;
+            input_1 =  getAchievementsPages().size()-4;
             input_2 = getAchievementsPages().size();
 
             return;

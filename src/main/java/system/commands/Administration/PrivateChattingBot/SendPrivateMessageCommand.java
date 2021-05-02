@@ -77,22 +77,26 @@ public class SendPrivateMessageCommand implements Command {
                 if (privatechat.containsKey(event.getAuthor())) {
                     event.getChannel().sendMessage(new MessageUtils(":successful: | private has been closed").EmojisHolder()).queue();
 
-                    event.getAuthor().openPrivateChannel().queue(message -> {
-                        EmbedBuilder embed = new EmbedBuilder();
+                    try {
+                        event.getAuthor().openPrivateChannel().queue(message -> {
+                            EmbedBuilder embed = new EmbedBuilder();
 
-                        embed.setTitle(new MessageUtils("Would you like to save the message with " + privatechat.get(event.getAuthor()).getGetter().getName() + " ? :loading:").EmojisHolder());
-                        embed.setColor(new Color(188, 255, 166));
-                        embed.setDescription("> all message that you sent will saved!, you just have 2minutes to save it when the message will deleted Automatic❗, or you can deleted it quickly when you click on ❌!");
-                        embed.setFooter("\uD83D\uDDD3️ Date : " + new SimpleDateFormat("EEEE, dd MMM yyyy").format(new Date()));
+                            embed.setTitle(new MessageUtils("Would you like to save the message ? :loading:").EmojisHolder());
+                            embed.setColor(new Color(188, 255, 166));
+                            embed.setDescription("> all message that you sent will saved!, you just have 2minutes to save it when the message will deleted Automatic❗, or you can deleted it quickly when you click on ❌!");
+                            embed.setFooter("\uD83D\uDDD3️ Date : " + new SimpleDateFormat("EEEE, dd MMM yyyy").format(new Date()));
 
-                        Message msg = message.sendMessage(embed.build()).complete();
-                        msg.addReaction("✅").queue();
-                        msg.addReaction("❌").queue();
+                            Message msg = message.sendMessage(embed.build()).complete();
+                            msg.addReaction("✅").queue();
+                            msg.addReaction("❌").queue();
 
-                        fileFunctionMsg.put(event.getAuthor(), msg);
-                    });
+                            fileFunctionMsg.put(event.getAuthor(), msg);
+                        });
 
-                    fileFunction.put(event.getAuthor(), privatechat.get(event.getAuthor()).getFile());
+                        fileFunction.put(event.getAuthor(), privatechat.get(event.getAuthor()).getFile());
+                    } catch (Exception ignored) {
+
+                    }
 
                     privatechat.get(event.getAuthor()).end();
                     getterchat.remove(privatechat.get(event.getAuthor()).getGetter());

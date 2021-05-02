@@ -4,25 +4,41 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import system.objects.Category;
 import system.objects.Command;
+import system.objects.Utils.LanguagesUtils.LanguagesManager;
+import system.objects.Utils.LanguagesUtils.MessagesKeys;
 import system.objects.Utils.levelUtils.LevelsCalculations;
 
 import java.io.FileNotFoundException;
 import java.util.List;
 
-public class testcommand implements LevelsCalculations, Command {
+public class testcommand implements Command, LevelsCalculations {
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) throws FileNotFoundException {
 
-        event.getAuthor().openPrivateChannel().queue(msg -> {
-            msg.sendMessage("wassap").queue(message -> {
+        LanguagesManager language = new LanguagesManager(event.getAuthor());
 
-            }, error -> {
-                event.getChannel().sendMessage("I can't send direct message , `"+error.getMessage()+"`").queue();
-            });
-        }, error -> {
-            event.getChannel().sendMessage("I can't send direct message , `"+error.getMessage()+"`").queue();
-        });
+        event.getChannel().sendMessage(language.getMessage(MessagesKeys.HELLO_MESSAGE)).queue();
+
+//        Queue<User> users = new ConcurrentLinkedDeque<>();
+//
+//        StringBuilder queue = new StringBuilder();
+//
+//        event.getGuild().getMembers().stream().filter(filter -> !filter.getUser().isBot() && !filter.getUser().isFake()).forEach(member -> {
+//            users.add(member.getUser());
+//
+//            if (users.size() >= 2) {
+//                queue.append("**").append(users.remove().getName()).append("**").append(" and ").append("**").append(users.remove().getName()).append("**").append(" are couples right now uwu!").append("\n");
+//            }
+//        });
+//
+//        if (users.size() <= 1) {
+//            queue.append("**").append(users.remove().getName()).append("**").append(" are lonely u_u").append("\n");
+//        }
+//
+//        System.out.println("Queue size : " + users.size() + " | Members size: " + event.getGuild().getMembers().stream().filter(f -> !f.getUser().isBot()).count());
+//
+//        event.getChannel().sendMessage(queue.toString()).queue();
 
         //        String exp = args.get(0);
 //        float level = (float) LevelsCalculations.getLevelFromExp(Double.parseDouble(exp));

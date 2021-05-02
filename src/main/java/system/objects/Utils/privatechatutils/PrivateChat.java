@@ -132,15 +132,19 @@ public class PrivateChat {
     }
 
     public void start(String msg) {
-        setStarted(true);
-        setMode(PrivateChatMode.CHATTING);
-        buildFileMessage(this.sender, this.getter);
+        try {
+            setStarted(true);
+            setMode(PrivateChatMode.CHATTING);
+            buildFileMessage(this.sender, this.getter);
 
-        PrivateChannel privateChannel = getGetter().openPrivateChannel().complete();
-        Message message = privateChannel.sendMessage(new PrivateChatFilterManager(msg).toFilter(getGetter())).complete();
+            PrivateChannel privateChannel = getGetter().openPrivateChannel().complete();
+            Message message = privateChannel.sendMessage(new PrivateChatFilterManager(msg).toFilter(getGetter())).complete();
 
-        setSenderMessage(message);
-        lastBotMessages.add(message);
+            setSenderMessage(message);
+            lastBotMessages.add(message);
+        } catch (Exception e) {
+            channel.sendMessage("I can't DM this user!").queue();
+        }
     }
 
     public void end() {

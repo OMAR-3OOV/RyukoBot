@@ -9,6 +9,8 @@ import system.CommandManager;
 import system.objects.Category;
 import system.objects.Command;
 import system.objects.Config;
+import system.objects.Utils.LanguagesUtils.LanguagesManager;
+import system.objects.Utils.LanguagesUtils.MessagesKeys;
 import system.objects.Utils.administration.HelpPagesUtil;
 import system.objects.Utils.administration.HelpUtil;
 
@@ -35,6 +37,7 @@ public class helpCommand implements Command {
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
 
         Command command = manager.getCommand(String.join("", args));
+        LanguagesManager languagesManager = new LanguagesManager(event.getAuthor());
 
         if (args.isEmpty()) {
             GenerateAndSendEmbed(event);
@@ -42,7 +45,7 @@ public class helpCommand implements Command {
         }
 
         if (command == null) {
-            event.getChannel().sendMessage("❌ - this command is not exist! please use `r!help`").queue();
+            event.getChannel().sendMessage(languagesManager.getMessage(MessagesKeys.HELP_MESSAGE_ERROR_COMMAND)).queue();
             return;
         }
 
@@ -88,7 +91,7 @@ public class helpCommand implements Command {
         HelpPagesUtil page = new HelpPagesUtil(event.getAuthor(), msg, embed);
 
         manager.getCategories().forEach((category) -> {
-            if (map.values().stream().map(m -> m.getCategory().equals(category)).anyMatch(any -> any.booleanValue())) {
+            if (map.values().stream().anyMatch(m -> m.getCategory().equals(category))) {
                 if (event.getAuthor().getId().contains("304609934967046144")){
                     helpUtil.addCategory(category, map.values().stream().filter(f -> f.getCategory().equals(category)).collect(Collectors.toList()));
                 } else {

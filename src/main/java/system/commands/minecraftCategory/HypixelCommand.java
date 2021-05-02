@@ -8,6 +8,7 @@ import me.kbrewster.hypixelapi.HypixelAPI;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import system.objects.Category;
 import system.objects.Command;
@@ -30,10 +31,11 @@ public class HypixelCommand implements Command {
      * MOJANG PLAYER API https://api.mojang.com/users/profiles/minecraft/<player-name>
      */
 
-    private String historyNames;
     private String guild;
     private String getRank;
     private String getStatus;
+
+    public static HashMap<User, Message> hypixelPlayerLog = new HashMap<>();
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
@@ -784,20 +786,19 @@ public class HypixelCommand implements Command {
                                 embed.addField("**__Status__**", status.get("session").path("online").asBoolean()?(getStatus + " `" + printTimeLeft(new Date(), new Date(LASTLOGIN)) + "`"):getStatus, false);
 
                                 /* Sorted history name */
-                                LinkedHashMap<String, LinkedList<String>> NameList = new LinkedHashMap<>();
-                                LinkedList<String> histrorys1 = new LinkedList<>();
+                                //LinkedHashMap<String, LinkedList<String>> NameList = new LinkedHashMap<>();
+                                LinkedList<String> nameHistory = new LinkedList<>();
 
                                 for (int i = 0; i < hypixel.get("player").path("knownAliases").size(); i++) {
-                                    historyNames = hypixel.get("player").path("knownAliases").get(i).asText();
-                                    NameList.put(name, histrorys1);
-                                    NameList.get(name).add("'" + historyNames + "'");
+                                    nameHistory.add(hypixel.get("player").path("knownAliases").get(i).asText());
                                 }
 
-                                if (histrorys1.contains("'" + name + "'")) {
-                                    embed.addField("Name History", "```diff\n" + String.join("\n", NameList.get(name)).replaceAll("'" + name + "'", "- " + name).replace("'", "") + "```", false);
-                                } else {
-                                    embed.addField("Name History", "```yaml\n" + "THERE IS NO HISTORY NAME FOR THIS USER```", false);
-                                }
+                                StringBuilder namespace = new StringBuilder();
+                                nameHistory.forEach((names) -> {
+                                    namespace.append(names.contains(name)?"- " + names:names).append("\n");
+                                });
+                                embed.addField("Name History", "```diff\n" + namespace.toString() + "\n```", false);
+
                                 if (hypixel.get("player").path("socialMedia").isNull() || hypixel.get("player").path("socialMedia").path("links").path("DISCORD").asText().isEmpty() || hypixel.get("player").path("socialMedia").path("links").path("DISCORD").isNull()) {
                                     embed.setFooter(name + " | Discord : " + "DISCORD NOT LONGER", StringX.DISCORD.toString());
                                 } else {
@@ -808,6 +809,7 @@ public class HypixelCommand implements Command {
 
                                 WebUtils.ins.getJSONObject("https://api.hypixel.net/recentgames?key=" + APIKEY + "&uuid=" + uuid).async((log) -> {
                                     msg.addReaction("\uD83E\uDEB5").queue();
+                                    hypixelPlayerLog.put(event.getAuthor(), msg);
                                 }, (error) -> {
                                 });
 

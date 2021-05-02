@@ -8,22 +8,20 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import system.objects.Category;
 import system.objects.Command;
-import system.objects.TextUtils.MessageUtils;
-import system.objects.Utils.RandomStringAPI;
+import system.objects.Utils.LanguagesUtils.LanguagesManager;
+import system.objects.Utils.LanguagesUtils.MessagesKeys;
+import system.objects.Utils.VerifyUtil;
 import system.objects.Utils.profileconfigutils.ProfileBuilder;
 
 import java.awt.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 public class verifyCommand implements Command {
 
-    public static HashMap<User, String> verifyCheck = new HashMap<>();
-    public static HashMap<User, Message> verifyChecking = new HashMap<>();
-    public static HashMap<User, Timer> verifyCompleted = new HashMap<>();
+    public static HashMap<User, VerifyUtil> verify = new HashMap<>();
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
@@ -71,42 +69,57 @@ public class verifyCommand implements Command {
     }
 
     public static void setup(GuildMessageReceivedEvent event) {
-        final ProfileBuilder profile = new ProfileBuilder(event.getAuthor());
+        final ProfileBuilder profile = new ProfileBuilder(event.getAuthor(), event.getGuild());
+        final LanguagesManager languagesManager = new LanguagesManager(event.getAuthor());
+        final VerifyUtil verifyUtil = new VerifyUtil(event.getAuthor(), event.getChannel(), null);
 
-        if (profile.getVerify()) {
-            event.getChannel().sendMessage(new MessageUtils(":error: | **Your account is already verified**").EmojisHolder()).queue();
+        if (verify.containsKey(event.getAuthor())) {
             return;
         }
 
-        RandomStringAPI rna = new RandomStringAPI(event.getAuthor(), 20);
+        if (profile.getVerify()) {
+            event.getChannel().sendMessage(languagesManager.getMessage(MessagesKeys.VERIFY_VERIFIED, event.getAuthor(), null)).queue();
+            return;
+        }
 
-        Timer timer = new Timer();
-
-        timer.scheduleAtFixedRate(new TimerTask() {
+        verifyUtil.getTimer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (rna.getMap().containsKey(event.getAuthor())) {
-                    rna.getMap().remove(event.getAuthor());
+                if (verifyUtil.getRsu().getMap().containsKey(event.getAuthor())) {
+                    verifyUtil.getRsu().getMap().remove(event.getAuthor());
 
                     event.getAuthor().openPrivateChannel().queue((privateChannel -> {
-                        privateChannel.sendMessage("**Verify Code has been disappeared \uD83D\uDE3F**").queue();
+                        File file = new File("Image/reactions/disappear.gif");
+
+                        EmbedBuilder embed = new EmbedBuilder();
+
+                        embed.setTitle(languagesManager.getMessage(MessagesKeys.VERIFY_DISAPPEAR, event.getAuthor(), null));
+                        embed.setColor(Color.RED);
+                        embed.setImage("attachment://disappear.gif");
+
+                        privateChannel.sendMessage(embed.build()).addFile(file).queue();
                     }));
                 }
             }
         }, (1000 * 60), (1000 * 60));
 
-        verifyCompleted.put(event.getAuthor(), timer);
-
         event.getAuthor().openPrivateChannel().queue((privateChannel -> {
-            EmbedBuilder embed = new EmbedBuilder();
-            embed.setTitle("Verify your discord account in bot data");
-            embed.setColor(Color.RED);
-            embed.addField(" ", "**Code :** " + rna.getKey(), false);
 
-            privateChannel.sendMessage(embed.build()).queue();
-            verifyCheck.put(event.getAuthor(), rna.getKey());
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.setTitle(languagesManager.getMessage(MessagesKeys.VERIFY_PRIVATE_MESSAGE));
+            embed.setColor(Color.RED);
+            embed.addField(" ", "**Code :** " + verifyUtil.getRsu().getKey(), false);
+
+            privateChannel.sendMessage(embed.build()).queue(msg -> {
+                msg.addReaction("✅").queue();
+            }, (error) -> {
+                event.getChannel().sendMessage(languagesManager.getMessage(MessagesKeys.VERIFY_CANNOT_SENDMESSAGE, event.getAuthor(), null)).complete().addReaction("❌").queue();
+            });
         }));
 
-        event.getChannel().sendMessage("Check your private chat, you have 60 seconds only to enter the code, if you didn't enter it the code will disappear").delay(60, TimeUnit.SECONDS).queue();
+        Message message = event.getChannel().sendMessage(languagesManager.getMessage(MessagesKeys.VERIFY_MESSAGE, event.getAuthor(), null)).complete();
+        verifyUtil.setMessage(message);
+
+        verify.put(event.getAuthor(), verifyUtil);
     }
 }

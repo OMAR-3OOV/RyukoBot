@@ -9,6 +9,8 @@ version '0.0.1'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
+compileJava.options.encoding("UTF-8")
+
 repositories {
     mavenCentral()
     jcenter()
@@ -30,28 +32,16 @@ allprojects {
 }
 
 dependencies {
-    // Discord - JDA
-    implementation 'net.dv8tion:JDA:4.2.1_256'
+    implementation 'net.dv8tion:JDA:4.2.1_259'
     implementation group:'com.jagrosh' , name: 'jda-utilities', version: '3.0.5'
-    // Some JDA additions
     implementation group: 'me.duncte123', name: 'botCommons', version: 'BETA_2.0.110'
-    // Website response
     implementation 'me.duncte123:weebJava:2.2.0_29'
-    // Log system
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.3.0-alpha5'
-    // Dot env file
     implementation 'io.github.cdimascio:java-dotenv:5.2.2'
-    // Hypixel API
     implementation 'com.github.KevinPriv:HypixelApi4J:API-1.7'
     implementation 'ru.mdashlw.hypixel:hypixel-api:6.0.5'
-    // json simple
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-    // time ago
     implementation 'com.github.marlonlom:timeago:4.0.3'
-    // nsfw
     implementation 'net.kodehawa:imageboard-api:2.4.5'
-    // MathUtils
     implementation group: 'fr.inrae.toulouse.metexplore', name: 'met4j-mathUtils', version: '0.2.10'
 }
-
-compileJava.options.encoding = 'UTF-8'

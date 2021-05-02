@@ -162,7 +162,7 @@ public class bannedCommand implements Command {
                         builder.append("**Reason: **").append(reason).append("\n");
                     }
 
-                    builder.append("**You'll get unbanned till: **").append(f.format(new Date(finalElapsedTime)));
+                    builder.append("**Your banned will expired in : **").append(f.format(new Date(finalElapsedTime)));
                     t.sendMessage(embed.build()).queue();
                     bannedUtils.getProfile().getProfileProperties().setProperty("banned-ticket", bannedUtils.getRsa().getKey());
                     bannedUtils.build(date, new Date(finalElapsedTime), bannedUtils.getRsa().getKey(), reason.toString());
@@ -239,13 +239,13 @@ public class bannedCommand implements Command {
         StringBuilder builder = new StringBuilder();
         long different = dateEnd.getTime() - dateStart.getTime();
 
-        long seconds = 1000;
+        long seconds = 1000L;
         long minutes = seconds * 60;
         long hours = minutes * 60;
         long days = hours * 24;
         long weeks = days * 7;
-        long months = (long) (days * 30);
-        long years = days * 365;
+        long months = (long) (days * 31.53);
+        long years = (long) (days * 365);
 
         long elapsedY = different / years;
 
@@ -269,13 +269,13 @@ public class bannedCommand implements Command {
 
         // System.out.println(elapsedY + " years," + elapsedM + " month, " + elapsedM + " weeks, " + elapsedD + "  days, " + elapsedH + " hours");
 
-        builder.append(elapsedY > 0 ? elapsedY + " year" + (elapsedY > 1 ? "s " : " ") : " ");
-        builder.append(elapsedM > 0 ? elapsedM + " month" + (elapsedM > 1 ? "s " : " ") : " ");
-        builder.append(elapsedW > 0 ? elapsedW + " week" + (elapsedW > 1 ? "s " : " ") : " ");
-        builder.append(elapsedD > 0 ? elapsedD + " day" + (elapsedD > 1 ? "s " : " ") : " ");
-        builder.append(elapsedH > 0 ? elapsedH + " hour" + (elapsedH > 1 ? "s " : " ") : " ");
-        builder.append(elapsedMIN > 0 ? elapsedMIN + " minute" + (elapsedMIN > 1 ? "s " : " ") : " ");
-        builder.append(elapsedS > 0 ? elapsedS + " second" + (elapsedS > 1 ? "s " : " ") : " ");
+        builder.append(elapsedY > 0 ? elapsedY + " year" + (elapsedY > 1 ? "s " : " ") : "");
+        builder.append(elapsedM > 0 ? elapsedM + " month" + (elapsedM > 1 ? "s " : " ") : "");
+        builder.append(elapsedW > 0 ? elapsedW + " week" + (elapsedW > 1 ? "s " : " ") : "");
+        builder.append(elapsedD > 0 ? elapsedD + " day" + (elapsedD > 1 ? "s " : " ") : "");
+        builder.append(elapsedH > 0 ? elapsedH + " hour" + (elapsedH > 1 ? "s " : " ") : "");
+        builder.append(elapsedMIN > 0 ? elapsedMIN + " minute" + (elapsedMIN > 1 ? "s " : " ") : "");
+        builder.append(elapsedS > 0 ? elapsedS + " second" + (elapsedS > 1 ? "s " : " ") : "");
 
         return builder.toString();
     }

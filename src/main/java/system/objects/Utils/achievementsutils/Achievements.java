@@ -3,23 +3,23 @@ package system.objects.Utils.achievementsutils;
 public enum Achievements {
 
     // Secret achievements
-    DMSME(0, Achievementypes.SECRETY,"Direct Message", "direct-message", "Send DM to Ryuko"),
-    LOVESME(1, Achievementypes.SECRETY, "You Love Me", "loves-me", "Send `i love you` in DM to Ryuko"),
-    THREE_HEART_AT_ONCE(3, Achievementypes.SECRETY, "Three Heart At Once", "three-hearts", "Send three hearts to Ryuko"),
-    DAILY_COMMAND_FOR_7DAYS(4, Achievementypes.SECRETY, "Daily Command For Week", "daily-week", "Use Daily command 7 consecutive days"),
-    PAY_TO_ME(5, Achievementypes.SECRETY, "Pay To Me", "pay-me", "Pay to Ryuko a ruko's"),
-    THREE_MESSAGE_IN_FIVE_SECONDS(6, Achievementypes.SECRETY, "Three Messages In Five Seconds", "three-messages-five-seconds", "Send to Ryuko three message in DM with five seconds"),
-    REACTION_MESSAGE_IN_DM(7, Achievementypes.SECRETY, "Reaction Direct Message", "reaction-message-dm", "Add reaction to any message that bot sent you in the DM"),
+    DMSME(0, Achievementypes.SECRETY,"achievement-dmsme-name", "direct-message", "achievement-dmsme-description"),
+    LOVESME(1, Achievementypes.SECRETY, "achievement-lovesme-name", "loves-me", "achievement-lovesme-description"),
+    THREE_HEART_AT_ONCE(3, Achievementypes.SECRETY, "achievement-threehearts-name", "three-hearts", "achievement-threehearts-description"),
+    DAILY_COMMAND_FOR_7DAYS(4, Achievementypes.SECRETY, "achievement-dailyforweek-name", "daily-week", "achievement-dailyforweek-description"),
+    PAY_TO_ME(5, Achievementypes.SECRETY, "achievement-paytome-name", "pay-me", "achievement-paytome-description"),
+    THREE_MESSAGE_IN_FIVE_SECONDS(6, Achievementypes.SECRETY, "achievement-threemessageinfivesecond-name", "three-messages-five-seconds", "achievement-threemessageinfivesecond-description"),
+    REACTION_MESSAGE_IN_DM(7, Achievementypes.SECRETY, "achievement-reactionmessageindm-name", "reaction-message-dm", "achievement-reactionmessageindm-description"),
 
     // GUI Achievements
-    USE_FIRST_COMMAND(8, Achievementypes.GLOBAL, "First Command For You", "first-command", "First command that you used"),
-    VERIFIED(9, Achievementypes.GLOBAL, "Account Verified", "verified-account", "You're account has been verified"),
-    REACH_RUKO_10000(10, Achievementypes.GLOBAL, "Reach 10000 Ruko's", "reach-ruko-10000", "You reached 10000 ruko's"),
-    REACH_RUKO_100000(11, Achievementypes.GLOBAL, "Reach 100000 Ruko's", "reach-ruko-100000", "You reached 100000 ruko's"),
-    RPC_WINSTREAK_THREE(12, Achievementypes.GLOBAL, "Win streak Rpc Three Times", "rpc-winstreak-three", "You're achieved three winstreak on rpc game"),
-    RPC_WINSTREAK_FIVE(13, Achievementypes.GLOBAL, "Win streak Rpc Five Times", "rpc-winstreak-five", "You're achieved five winstreak on rpc game"),
-    RPC_WINSTREAK_TEN(14, Achievementypes.GLOBAL, "Win streak Rpc Ten Times", "rpc-winstreak-ten", "You're achieved ten winstreak on rpc game"),
-    SEND_100_MESSAGE_IN_RYUKOSERVER(15, Achievementypes.GLOBAL, "Send 100 Message", "send-100-message", "Sending 100 message in ryuko server");
+    USE_FIRST_COMMAND(8, Achievementypes.GLOBAL, "achievement-usefirstcommand-name", "first-command", "achievement-usefirstcommand-description"),
+    VERIFIED(9, Achievementypes.GLOBAL, "achievement-verified-name", "verified-account", "achievement-verified-description"),
+    REACH_RUKO_10000(10, Achievementypes.GLOBAL, "achievement-reach10000ruko-name", "reach-ruko-10000", "achievement-reach10000ruko-description"),
+    REACH_RUKO_100000(11, Achievementypes.GLOBAL, "achievement-reach100000ruko-name", "reach-ruko-100000", "achievement-reach100000ruko-description"),
+    RPC_WINSTREAK_THREE(12, Achievementypes.GLOBAL, "achievement-rpcwinstreakthree-name", "rpc-winstreak-three", "achievement-rpcwinstreakthree-description"),
+    RPC_WINSTREAK_FIVE(13, Achievementypes.GLOBAL, "achievement-rpcwinstreakfive-name", "rpc-winstreak-five", "achievement-rpcwinstreakfive-description"),
+    RPC_WINSTREAK_TEN(14, Achievementypes.GLOBAL, "achievement-rpcwinstreakten-name", "rpc-winstreak-ten", "achievement-rpcwinstreakten-description"),
+    SEND_100_MESSAGE_IN_RYUKOSERVER(15, Achievementypes.GLOBAL, "achievement-send100messageinryukoserver-name", "send-100-message", "achievement-send100messageinryukoserver-description");
 
     private final int achievementId;
     private final Achievementypes type;

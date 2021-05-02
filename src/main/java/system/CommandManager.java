@@ -124,7 +124,7 @@ public class CommandManager {
     public void handleCommand(@Nullable GuildMessageReceivedEvent event, String prefix) throws FileNotFoundException {
         final String[] split = event.getMessage().getContentRaw().replaceFirst("(?i)" + Pattern.quote(prefix), "").split("\\s+");
         final String invoke = split[0].toLowerCase();
-        final ProfileBuilder profile = new ProfileBuilder(event.getAuthor());
+        final ProfileBuilder profile = new ProfileBuilder(event.getAuthor(), event.getGuild());
 
         if (commands.containsKey(invoke)) {
             final List<String> args = Arrays.asList(split).subList(1, split.length);

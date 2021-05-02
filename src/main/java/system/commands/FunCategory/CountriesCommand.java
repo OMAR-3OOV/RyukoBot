@@ -109,7 +109,7 @@ public class CountriesCommand implements Command {
 
     @Override
     public String getDescription() {
-        return null;
+        return "You can know the countries that use specific language";
     }
 
     @Override

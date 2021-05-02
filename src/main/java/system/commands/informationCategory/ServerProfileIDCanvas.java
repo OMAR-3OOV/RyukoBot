@@ -31,7 +31,7 @@ public class ServerProfileIDCanvas implements Command, LevelsCalculations {
             Message message = event.getChannel().sendMessage("Wait please that might take a little bit time!, " + event.getAuthor().getAsMention()).complete();
 
             if (handlers.isEmpty()) {
-                ProfileBuilder profile = new ProfileBuilder(event.getAuthor());
+                ProfileBuilder profile = new ProfileBuilder(event.getAuthor(), event.getGuild());
                 AchievementsManager achievementsManager = new AchievementsManager(event.getAuthor());
 
                 DrawProfileCanvas profileCanvas = new DrawProfileCanvas(profile.getUser(), event.getGuild(), event.getMember().getRoles().stream().filter(f->f.getColor()!=null).findFirst().get(), profile.getRuko(), profile.getLevel(), achievementsManager.getAchievements().size());
@@ -57,7 +57,7 @@ public class ServerProfileIDCanvas implements Command, LevelsCalculations {
                 User target = Objects.requireNonNull(event.getGuild().getMemberById(user)).getUser();
                 Member tm = event.getGuild().getMemberById(user);
 
-                ProfileBuilder profile = new ProfileBuilder(target);
+                ProfileBuilder profile = new ProfileBuilder(target, event.getGuild());
                 AchievementsManager achievementsManager = new AchievementsManager(target);
 
                 DrawProfileCanvas profileCanvas = new DrawProfileCanvas(profile.getUser(), event.getGuild(), tm.getRoles().stream().findFirst().get(), profile.getRuko(), profile.getLevel(), achievementsManager.getAchievements().size());
