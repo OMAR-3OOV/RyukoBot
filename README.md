@@ -1,5 +1,5 @@
 # Project Name: RyukoBot
-# Created By: OMAR KHALID
+# Created By: Indra#4646
 # First Launch : none
 
 # Libbraries: JDA 
