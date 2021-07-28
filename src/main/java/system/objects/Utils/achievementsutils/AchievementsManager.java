@@ -171,7 +171,7 @@ public class AchievementsManager {
         LanguagesManager languagesManager = new LanguagesManager(this.user);
 
         Arrays.stream(achievements).forEach(achievement -> {
-            builder.append("\n- ").append(languagesManager.getAchievementName(achievement)).append(" | ").append(" Type : ").append(achievement.getType().getName()).append("\n");
+            builder.append("\n- ").append(languagesManager.getAchievementName(achievement)).append(" | ").append(" Type : ").append(achievement.getAchievementDescription()).append("\n");
         });
 
         embed.setColor(new Color(175, 141, 252));
@@ -182,7 +182,8 @@ public class AchievementsManager {
         user.openPrivateChannel().queue(privatemsg -> {
             privatemsg.sendMessage(embed.build()).queue(message -> {
 
-            }, error -> {
+            }, (error) -> {
+
             });
         });
     }

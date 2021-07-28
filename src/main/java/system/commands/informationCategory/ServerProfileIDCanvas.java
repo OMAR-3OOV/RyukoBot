@@ -86,7 +86,7 @@ public class ServerProfileIDCanvas implements Command, LevelsCalculations {
 
     @Override
     public String getDescription() {
-        return "You can see here your ryuko id, `(Beta)`";
+        return "You can see here your ryuko id, `(Outdated)`";
     }
 
     @Override
@@ -101,7 +101,7 @@ public class ServerProfileIDCanvas implements Command, LevelsCalculations {
 
     @Override
     public Boolean Lockdown() {
-        return false;
+        return true;
     }
 
     @Override
@@ -110,7 +110,7 @@ public class ServerProfileIDCanvas implements Command, LevelsCalculations {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return true;
     }
 }

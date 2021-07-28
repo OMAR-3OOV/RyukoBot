@@ -176,7 +176,7 @@ public class SendPrivateMessageCommand implements Command {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return false;
     }
 

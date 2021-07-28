@@ -130,7 +130,7 @@ public class rpcGame implements Command {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return true;
     }
 

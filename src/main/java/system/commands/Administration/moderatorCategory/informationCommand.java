@@ -149,7 +149,7 @@ public class informationCommand implements Command {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return false;
     }
 

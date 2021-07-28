@@ -11,6 +11,7 @@ import system.objects.Command;
 import system.objects.Utils.LanguagesUtils.LanguagesManager;
 import system.objects.Utils.LanguagesUtils.MessagesKeys;
 import system.objects.Utils.VerifyUtil;
+import system.objects.Utils.achievementsutils.*;
 import system.objects.Utils.profileconfigutils.ProfileBuilder;
 
 import java.awt.*;
@@ -64,7 +65,7 @@ public class verifyCommand implements Command {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return true;
     }
 

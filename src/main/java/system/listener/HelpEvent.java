@@ -15,9 +15,7 @@ import system.objects.Utils.administration.HelpPagesUtil;
 import system.objects.Utils.administration.HelpUtil;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class HelpEvent extends ListenerAdapter {
 
@@ -99,7 +97,7 @@ public class HelpEvent extends ListenerAdapter {
                             helperEmbed.setTitle("Management Category");
                             embed.setColor(new Color(255, 87, 87));
                             helper.get(event.getUser()).getMap().get(Category.MANAGEMENT).forEach(cmd -> {
-                                embed.addField("** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.diplayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
+                                embed.addField("** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.displayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
                             });
 
                             helperEmbed.setFooter("Usage: r!help <command>");
@@ -112,7 +110,7 @@ public class HelpEvent extends ListenerAdapter {
                             helperEmbed.setTitle("Moderator Category");
                             embed.setColor(new Color(255, 171, 87));
                             helper.get(event.getUser()).getMap().get(Category.MODERATOR).forEach(cmd -> {
-                                embed.addField("** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.diplayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
+                                embed.addField("** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.displayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
                             });
 
                             helperEmbed.setFooter("Usage: r!help <command>");
@@ -124,7 +122,7 @@ public class HelpEvent extends ListenerAdapter {
                             helperEmbed.setTitle("Information Category");
                             embed.setColor(new Color(87, 221, 255));
                             helper.get(event.getUser()).getMap().get(Category.INFORMATION).forEach(cmd -> {
-                                embed.addField("** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.diplayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
+                                embed.addField("** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.displayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
                             });
 
                             helperEmbed.setFooter("Usage: r!help <command>");
@@ -136,7 +134,7 @@ public class HelpEvent extends ListenerAdapter {
                             helperEmbed.setTitle("Fun Category");
                             embed.setColor(new Color(104, 87, 255));
                             helper.get(event.getUser()).getMap().get(Category.FUN).forEach(cmd -> {
-                                embed.addField("** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.diplayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
+                                embed.addField("** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.displayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
                             });
 
                             helperEmbed.setFooter("Usage: r!help <command>");
@@ -148,7 +146,7 @@ public class HelpEvent extends ListenerAdapter {
                             helperEmbed.setTitle("Minecraft Category");
                             embed.setColor(new Color(132, 255, 130));
                             helper.get(event.getUser()).getMap().get(Category.MINECRAFT).forEach(cmd -> {
-                                embed.addField("** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.diplayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
+                                embed.addField("** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.displayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
                             });
 
                             helperEmbed.setFooter("Usage: r!help <command>");
@@ -160,7 +158,7 @@ public class HelpEvent extends ListenerAdapter {
                             helperEmbed.setTitle("Nsfw Category");
                             embed.setColor(new Color(64, 0, 0));
                             helper.get(event.getUser()).getMap().get(Category.NSFW).forEach(cmd -> {
-                                embed.addField("> ** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.diplayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
+                                embed.addField("> ** | ⬩ " + cmd.getInVoke() + "** " + (cmd.Lockdown() ? "\uD83D\uDD12 " : "") + (cmd.isNsfw() ? "\uD83D\uDD1E ":"") + (cmd.displayCommand() ? " ":"⛔ "), "> " + cmd.getDescription(), true);
                             });
 
                             builder.append("\n").append("**").append("Note:** This category is +18 so please don't use it if you underage!").append("\n");
@@ -176,8 +174,8 @@ public class HelpEvent extends ListenerAdapter {
                     if (page.containsKey(event.getUser())) {
 
                         builder.append("```").append("\n \n").append("```");
-                        helper.get(event.getUser()).getMap().forEach((key, value) -> {
-                            builder.append("**").append(key.getEmoji()).append(" | ⬩ ").append(key.getName()).append("**").append((helper.get(event.getUser()).getNow().get(event.getUser())==key?" ⬅️ Selected":"")).append("\n");
+                        helper.get(event.getUser()).getMap().entrySet().stream().sorted(Comparator.comparingInt(x -> x.getKey().getId())).forEach((key) -> {
+                            builder.append("**").append(key.getKey().getEmoji()).append(" | ⬩ ").append(key.getKey().getName()).append("**").append((helper.get(event.getUser()).getNow().get(event.getUser())==key.getKey()?" ⬅️ Selected":"")).append("\n");
                         });
                         builder.append("```").append("\n \n").append("```");
 

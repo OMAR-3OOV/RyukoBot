@@ -201,7 +201,7 @@ public class HypixelGuildCommand implements IGuildLeveling, Command {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return true;
     }
 }

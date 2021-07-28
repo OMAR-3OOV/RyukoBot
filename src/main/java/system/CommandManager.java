@@ -11,13 +11,10 @@ import system.commands.Administration.moderatorCategory.channelsAddonsCommands.p
 import system.commands.Administration.moderatorCategory.informationCommand;
 import system.commands.Administration.moderatorCategory.reactionMessageCommand;
 import system.commands.Administration.moderatorCategory.rolesCommand;
-import system.commands.FunCategory.CountriesCommand;
-import system.commands.FunCategory.animeCommand;
+import system.commands.FunCategory.*;
 import system.commands.Games.eventsGame;
 import system.commands.Games.rpcGame;
 import system.commands.NsfwCategory.NekoCommand;
-import system.commands.NsfwCategory.Rule34Command;
-import system.commands.NsfwCategory.SafeBooruCommand;
 import system.commands.informationCategory.AchievementsCommand;
 import system.commands.informationCategory.ServerProfileIDCanvas;
 import system.commands.informationCategory.profileCommand;
@@ -74,13 +71,11 @@ public class CommandManager {
         addCommand(new reactionMessageCommand());
         addCommand(new testcommand());
         addCommand(new NekoCommand());
-        addCommand(new Rule34Command());
-        addCommand(new SafeBooruCommand());
         addCommand(new HypixelGuildCommand());
         addCommand(new ServerProfileIDCanvas());
-        addCommand(new deletedMessageCommand());
         addCommand(new HypixelGuildFutureCommands());
         addCommand(new AchievementsCommand());
+        addCommand(new findAnimeCommand());
 
         // Add category
         addCategory(Category.MANAGEMENT);

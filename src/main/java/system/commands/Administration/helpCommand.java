@@ -95,17 +95,21 @@ public class helpCommand implements Command {
                 if (event.getAuthor().getId().contains("304609934967046144")){
                     helpUtil.addCategory(category, map.values().stream().filter(f -> f.getCategory().equals(category)).collect(Collectors.toList()));
                 } else {
-                    helpUtil.addCategory(category, map.values().stream().filter(f -> f.getCategory().equals(category) && f.diplayCommand()).collect(Collectors.toList()));
+                    helpUtil.addCategory(category, map.values().stream().filter(f -> f.getCategory().equals(category) && f.displayCommand()).collect(Collectors.toList()));
                 }
             }
         });
 
-        helpUtil.getMap().forEach((key, value) -> {
-            string.append("**").append(key.getEmoji()).append(" | ⬩ ").append(key.getName()).append("**").append("\n");
+        helpUtil.getMap().entrySet().stream().sorted(Comparator.comparingInt(x -> x.getKey().getId())).forEach((key) -> {
+            string.append("**").append(key.getKey().getEmoji()).append(" | ⬩ ").append(key.getKey().getName()).append("**").append("\n");
         });
 
-        helpUtil.getMap().forEach((key, value) -> {
-            msg.addReaction(key.getEmoji()).queue();
+//        helpUtil.getMap().forEach((key, value) -> {
+//            string.append("**").append(key.getEmoji()).append(" | ⬩ ").append(key.getName()).append("**").append("\n");
+//        });
+
+        helpUtil.getMap().entrySet().stream().sorted(Comparator.comparingInt(x -> x.getKey().getId())).forEach((key) -> {
+            msg.addReaction(key.getKey().getEmoji()).queue();
         });
 
         string.append("\n").append("```yml").append("\n");
@@ -176,7 +180,7 @@ public class helpCommand implements Command {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return true;
     }
 }

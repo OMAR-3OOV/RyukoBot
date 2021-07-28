@@ -73,7 +73,7 @@ public class SuggestModerator implements Command {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return false;
     }
 }

@@ -3,6 +3,7 @@ package system.objects.Utils.canvasutils;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/* Closed class, Outdated */
 public class HypixelCanvasProfile extends Canvas {
 
     private final String name;

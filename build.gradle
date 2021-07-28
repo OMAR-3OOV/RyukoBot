@@ -9,6 +9,8 @@ version '0.0.1'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
+mainClassName = "system.Core"
+
 compileJava.options.encoding("UTF-8")
 
 repositories {
@@ -42,6 +44,5 @@ dependencies {
     implementation 'ru.mdashlw.hypixel:hypixel-api:6.0.5'
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     implementation 'com.github.marlonlom:timeago:4.0.3'
-    implementation 'net.kodehawa:imageboard-api:2.4.5'
     implementation group: 'fr.inrae.toulouse.metexplore', name: 'met4j-mathUtils', version: '0.2.10'
 }

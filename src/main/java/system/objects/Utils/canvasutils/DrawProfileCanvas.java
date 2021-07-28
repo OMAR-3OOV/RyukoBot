@@ -17,6 +17,7 @@ import java.net.URLConnection;
 import java.util.Objects;
 import java.util.Random;
 
+/* Closed class, Outdated */
 public class DrawProfileCanvas extends Canvas implements LevelsCalculations {
 
     private BufferedImage bufferedImage;

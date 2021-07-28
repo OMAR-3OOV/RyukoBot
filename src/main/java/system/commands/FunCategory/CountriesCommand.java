@@ -133,7 +133,7 @@ public class CountriesCommand implements Command {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return true;
     }
 

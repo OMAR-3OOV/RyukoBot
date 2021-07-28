@@ -15,5 +15,5 @@ public interface Command {
     Category getCategory();
     Boolean Lockdown();
     Boolean isNsfw();
-    Boolean diplayCommand();
+    Boolean displayCommand();
 }

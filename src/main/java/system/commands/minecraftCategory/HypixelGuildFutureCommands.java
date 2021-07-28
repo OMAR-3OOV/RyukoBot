@@ -128,7 +128,7 @@ public class HypixelGuildFutureCommands implements Command {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return true;
     }
 

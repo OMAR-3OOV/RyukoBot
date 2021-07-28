@@ -18,8 +18,6 @@ public class testcommand implements Command, LevelsCalculations {
 
         LanguagesManager language = new LanguagesManager(event.getAuthor());
 
-        event.getChannel().sendMessage(language.getMessage(MessagesKeys.HELLO_MESSAGE)).queue();
-
 //        Queue<User> users = new ConcurrentLinkedDeque<>();
 //
 //        StringBuilder queue = new StringBuilder();
@@ -103,7 +101,7 @@ public class testcommand implements Command, LevelsCalculations {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return false;
     }
 

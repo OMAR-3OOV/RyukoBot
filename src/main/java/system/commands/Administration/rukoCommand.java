@@ -144,7 +144,7 @@ public class rukoCommand implements Command {
     }
 
     @Override
-    public Boolean diplayCommand() {
+    public Boolean displayCommand() {
         return false;
     }
 }

@@ -40,6 +40,7 @@ import system.objects.TextUtils.MessageUtils;
 import system.objects.Utils.*;
 import system.objects.Utils.LanguagesUtils.LanguagesManager;
 import system.objects.Utils.LanguagesUtils.MessagesKeys;
+import system.objects.Utils.achievementsutils.*;
 import system.objects.Utils.boosterutils.Booster;
 import system.objects.Utils.boosterutils.BoosterManagement;
 import system.objects.Utils.guildconfigutils.GuildsBuilder;
@@ -195,6 +196,7 @@ public final class Events extends ListenerAdapter {
     public void onPrivateMessageReceived(@NotNull PrivateMessageReceivedEvent event) {
 
         VerifyUtil verify = verifyCommand.verify.get(event.getAuthor());
+        final AchievementsManager achievementsManager = new AchievementsManager(event.getAuthor());
 
         if (event.getAuthor().isBot()) return;
         if (event.getAuthor().isFake()) return;
@@ -211,13 +213,16 @@ public final class Events extends ListenerAdapter {
                 embed.setImage("attachment://successfully.gif");
                 embed.setDescription(languagesManager.getMessage(MessagesKeys.VERIFY_SUCCESSFULLY_CODE));
 
-                event.getAuthor().openPrivateChannel().queue((msg) -> msg.sendMessage(embed.build()).addFile(file).queue());
+                event.getAuthor().openPrivateChannel().queue((msg) -> {
+                    msg.sendMessage(embed.build()).addFile(file).queue();
+                });
 
                 verify.setVerify(true);
 
                 verify.getMessage().editMessage(languagesManager.getMessage(MessagesKeys.VERIFY_SUCCESSFULLY_CODE) + " " + event.getAuthor().getAsMention()).queue();
 
                 verify.close();
+                achievementsManager.sendCollectedMessage(event.getAuthor(), Achievements.VERIFIED);
             } else {
                 File file = new File("Image/reactions/unfortunately.gif");
 
@@ -276,7 +281,7 @@ public final class Events extends ListenerAdapter {
 
                 EmbedBuilder embed = new EmbedBuilder();
 
-                switch(event.getReactionEmote().getName()) {
+                switch (event.getReactionEmote().getName()) {
                     case "✅":
                         embed.setColor(new Color(211, 211, 211));
                         embed.setDescription(new MessageUtils(":successful: all messages has been saved!").EmojisHolder());
@@ -288,7 +293,7 @@ public final class Events extends ListenerAdapter {
                         SendPrivateMessageCommand.fileFunction.get(event.getUser()).delete();
                         SendPrivateMessageCommand.fileFunction.remove(event.getUser());
 
-                        embed.setColor(new Color(255,0,0));
+                        embed.setColor(new Color(255, 0, 0));
                         embed.setTitle("Message deleted");
                         embed.setDescription("Everything has been deleted!");
 

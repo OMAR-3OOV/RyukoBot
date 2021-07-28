@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import system.listener.*;
+import system.objects.Utils.LanguagesUtils.*;
 import system.objects.Utils.achievementsutils.Achievements;
 import system.objects.Utils.achievementsutils.AchievementsManager;
 import system.objects.Utils.administration.BannedUtils.BannedUtils;
@@ -30,7 +31,9 @@ public class Core {
         SuggestManager suggestManager = new SuggestManager();
         ProfileBuilder settings = new ProfileBuilder();
         BannedUtils bannedUtils = new BannedUtils();
+        LanguagesManager languagesManager = new LanguagesManager();
 
+        languagesManager.BuildFiles();
         for (int achievements = 0; achievements < Achievements.values().length; achievements++) {
             Achievements achievement = Achievements.values()[achievements];
             AchievementsManager achievementsManager = new AchievementsManager(achievement.getAchievementKey());
