@@ -20,6 +20,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+/*
+*
+* There is a lot of glitches in this class + it's not done yet
+*
+*/
+
 public class HypixelGuildFutureCommands implements Command {
 
     @Override
