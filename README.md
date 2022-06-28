@@ -1,4 +1,4 @@
-# Project Name: RyukoBot
+# Project Name: RyukoBot (Outdated)
 # Created By: Indra#4646
 # First Launch : none
 
